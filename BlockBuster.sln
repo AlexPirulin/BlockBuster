@@ -1,0 +1,35 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlockBuster.Datos", "BlockBuster.Datos\BlockBuster.Datos.csproj", "{3828AAC8-3FF8-4CBB-9E64-FF5ED97BF0F3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlockBuster.Logica", "BlockBuster.Logica\BlockBuster.Logica.csproj", "{5EFE090B-39D7-408A-862F-A3D872C1D74A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlockBuster.Interfaz", "BlockBuster.Interfaz\BlockBuster.Interfaz.csproj", "{4437D9E5-FEE0-4D2A-9A89-DB6E7B86063E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3828AAC8-3FF8-4CBB-9E64-FF5ED97BF0F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3828AAC8-3FF8-4CBB-9E64-FF5ED97BF0F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3828AAC8-3FF8-4CBB-9E64-FF5ED97BF0F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3828AAC8-3FF8-4CBB-9E64-FF5ED97BF0F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5EFE090B-39D7-408A-862F-A3D872C1D74A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EFE090B-39D7-408A-862F-A3D872C1D74A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EFE090B-39D7-408A-862F-A3D872C1D74A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EFE090B-39D7-408A-862F-A3D872C1D74A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4437D9E5-FEE0-4D2A-9A89-DB6E7B86063E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4437D9E5-FEE0-4D2A-9A89-DB6E7B86063E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4437D9E5-FEE0-4D2A-9A89-DB6E7B86063E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4437D9E5-FEE0-4D2A-9A89-DB6E7B86063E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
+

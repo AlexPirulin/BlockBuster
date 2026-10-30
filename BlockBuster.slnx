@@ -1,3 +1,5 @@
 <Solution>
-  <Project Path="BlockBuster/BlockBuster.csproj" />
+  <Project Path="BlockBuster.Datos/BlockBuster.Datos.csproj" Id="3828aac8-3ff8-4cbb-9e64-ff5ed97bf0f3" />
+  <Project Path="BlockBuster.Logica/BlockBuster.Logica.csproj" Id="5efe090b-39d7-408a-862f-a3d872c1d74a" />
+  <Project Path="BlockBuster.Interfaz/BlockBuster.Interfaz.csproj" Id="4437d9e5-fee0-4d2a-9a89-db6e7b86063e" />
 </Solution>
