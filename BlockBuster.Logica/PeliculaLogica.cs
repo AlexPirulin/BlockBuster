@@ -1,5 +1,5 @@
 using System;
-using System.Data;
+using System.Collections.Generic;
 using BlockBuster.Datos;
 using BlockBuster.Datos.Entidades;
 
@@ -15,21 +15,20 @@ namespace BlockBuster.Logica
         }
 
         /// <summary>
-        /// Obtiene todas las películas para la interfaz de usuario.
+        /// Obtiene todas las películas registradas.
         /// </summary>
-        public DataTable ObtenerPeliculas()
+        public List<Pelicula> ObtenerPeliculas()
         {
             return _peliculaDatos.ListarPeliculas();
         }
 
         /// <summary>
-        /// Valida las reglas de negocio y registra una nueva película.
+        /// Valida las reglas de negocio y registra una nueva película en SQLite.
         /// </summary>
         public bool RegistrarPelicula(Pelicula pelicula, out string mensajeError)
         {
             mensajeError = string.Empty;
 
-            // Validaciones de negocio
             if (pelicula == null)
             {
                 mensajeError = "Los datos de la película no pueden estar vacíos.";
@@ -59,7 +58,55 @@ namespace BlockBuster.Logica
                 bool resultado = _peliculaDatos.InsertarPelicula(pelicula);
                 if (!resultado)
                 {
-                    mensajeError = "No se pudo insertar el registro en la base de datos.";
+                    mensajeError = "No se pudo insertar el registro en la base de datos SQLite.";
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                mensajeError = "Error en la capa de datos: " + ex.Message;
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Valida y actualiza los datos de una película existente.
+        /// </summary>
+        public bool ModificarPelicula(Pelicula pelicula, out string mensajeError)
+        {
+            mensajeError = string.Empty;
+
+            if (pelicula == null || pelicula.IdPelicula <= 0)
+            {
+                mensajeError = "El identificador de la película no es válido.";
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(pelicula.Titulo))
+            {
+                mensajeError = "El título de la película es obligatorio.";
+                return false;
+            }
+
+            if (pelicula.PrecioRenta <= 0)
+            {
+                mensajeError = "El precio de renta debe ser mayor a 0.";
+                return false;
+            }
+
+            if (pelicula.Stock < 0)
+            {
+                mensajeError = "El stock disponible no puede ser negativo.";
+                return false;
+            }
+
+            try
+            {
+                bool resultado = _peliculaDatos.ActualizarPelicula(pelicula);
+                if (!resultado)
+                {
+                    mensajeError = "No se pudo actualizar el registro en SQLite.";
                     return false;
                 }
                 return true;
@@ -100,6 +147,14 @@ namespace BlockBuster.Logica
                 return false;
             }
         }
+
+        /// <summary>
+        /// Obtiene una película por su ID.
+        /// </summary>
+        public Pelicula ObtenerPelicula(int idPelicula)
+        {
+            if (idPelicula <= 0) return null;
+            return _peliculaDatos.ObtenerPorId(idPelicula);
+        }
     }
 }
-

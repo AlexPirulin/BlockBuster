@@ -1,84 +1,90 @@
 using System;
-using System.Data;
-using System.Data.SqlClient;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using BlockBuster.Datos.Entidades;
 
 namespace BlockBuster.Datos
 {
     public class PeliculaDatos
     {
-        private readonly ConexionBD _conexion;
-
         public PeliculaDatos()
         {
-            _conexion = new ConexionBD();
+            // Garantiza que el archivo SQLite 'blockbuster.db' y las tablas existan
+            GarantizarBaseDatos();
         }
 
         /// <summary>
-        /// Obtiene todas las películas en un DataTable para enlazar a DataGridView o vistas.
+        /// Crea el archivo de base de datos SQLite y las tablas si aún no existen.
         /// </summary>
-        public DataTable ListarPeliculas()
+        public void GarantizarBaseDatos()
         {
-            DataTable tabla = new DataTable();
-
-            using (SqlConnection con = _conexion.ObtenerConexion())
+            using (var db = new BlockBusterDbContext())
             {
-                string query = "SELECT IdPelicula, Titulo, Genero, PrecioRenta, Stock FROM Peliculas";
-                using (SqlCommand cmd = new SqlCommand(query, con))
-                {
-                    using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
-                    {
-                        adapter.Fill(tabla);
-                    }
-                }
+                db.Database.EnsureCreated();
             }
-
-            return tabla;
         }
 
         /// <summary>
-        /// Inserta una nueva película en la base de datos.
+        /// Obtiene todas las películas usando Entity Framework Core.
+        /// </summary>
+        public List<Pelicula> ListarPeliculas()
+        {
+            using (var db = new BlockBusterDbContext())
+            {
+                return db.Peliculas.AsNoTracking().ToList();
+            }
+        }
+
+        /// <summary>
+        /// Inserta una nueva película mediante Entity Framework Core en SQLite.
         /// </summary>
         public bool InsertarPelicula(Pelicula pelicula)
         {
-            using (SqlConnection con = _conexion.ObtenerConexion())
+            using (var db = new BlockBusterDbContext())
             {
-                string query = "INSERT INTO Peliculas (Titulo, Genero, PrecioRenta, Stock) " +
-                               "VALUES (@Titulo, @Genero, @PrecioRenta, @Stock)";
-
-                using (SqlCommand cmd = new SqlCommand(query, con))
-                {
-                    cmd.Parameters.AddWithValue("@Titulo", pelicula.Titulo);
-                    cmd.Parameters.AddWithValue("@Genero", (object)pelicula.Genero ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@PrecioRenta", pelicula.PrecioRenta);
-                    cmd.Parameters.AddWithValue("@Stock", pelicula.Stock);
-
-                    con.Open();
-                    int filasAfectadas = cmd.ExecuteNonQuery();
-                    return filasAfectadas > 0;
-                }
+                db.Peliculas.Add(pelicula);
+                return db.SaveChanges() > 0;
             }
         }
 
         /// <summary>
-        /// Elimina una película por su ID.
+        /// Actualiza una película existente en SQLite.
+        /// </summary>
+        public bool ActualizarPelicula(Pelicula pelicula)
+        {
+            using (var db = new BlockBusterDbContext())
+            {
+                db.Peliculas.Update(pelicula);
+                return db.SaveChanges() > 0;
+            }
+        }
+
+        /// <summary>
+        /// Elimina una película por su identificador en SQLite.
         /// </summary>
         public bool EliminarPelicula(int idPelicula)
         {
-            using (SqlConnection con = _conexion.ObtenerConexion())
+            using (var db = new BlockBusterDbContext())
             {
-                string query = "DELETE FROM Peliculas WHERE IdPelicula = @IdPelicula";
+                var pelicula = db.Peliculas.Find(idPelicula);
+                if (pelicula == null)
+                    return false;
 
-                using (SqlCommand cmd = new SqlCommand(query, con))
-                {
-                    cmd.Parameters.AddWithValue("@IdPelicula", idPelicula);
+                db.Peliculas.Remove(pelicula);
+                return db.SaveChanges() > 0;
+            }
+        }
 
-                    con.Open();
-                    int filasAfectadas = cmd.ExecuteNonQuery();
-                    return filasAfectadas > 0;
-                }
+        /// <summary>
+        /// Busca una película por su ID.
+        /// </summary>
+        public Pelicula ObtenerPorId(int idPelicula)
+        {
+            using (var db = new BlockBusterDbContext())
+            {
+                return db.Peliculas.Find(idPelicula);
             }
         }
     }
 }
-
