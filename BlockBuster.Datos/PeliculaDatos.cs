@@ -19,10 +19,7 @@ namespace BlockBuster.Datos
         /// </summary>
         public void GarantizarBaseDatos()
         {
-            using (var db = new BlockBusterDbContext())
-            {
-                db.Database.EnsureCreated();
-            }
+            BlockBusterDbContext.InicializarBaseDatos();
         }
 
         /// <summary>

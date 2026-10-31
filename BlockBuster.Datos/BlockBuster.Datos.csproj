@@ -49,11 +49,17 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.32" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArticuloDatos.cs" />
     <Compile Include="BlockBusterDbContext.cs" />
+    <Compile Include="ClienteDatos.cs" />
     <Compile Include="ConexionBD.cs" />
+    <Compile Include="Entidades\Articulo.cs" />
+    <Compile Include="Entidades\Cliente.cs" />
     <Compile Include="Entidades\Pelicula.cs" />
+    <Compile Include="Entidades\Usuario.cs" />
     <Compile Include="PeliculaDatos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UsuarioDatos.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
