@@ -5,11 +5,11 @@ using BlockBuster.Datos.Entidades;
 
 namespace BlockBuster.Interfaz
 {
-    public partial class Form1 : Form
+    public partial class form1 : Form
     {
         private readonly PeliculaLogica _peliculaLogica;
 
-        public Form1()
+        public form1()
         {
             InitializeComponent();
             _peliculaLogica = new PeliculaLogica();
@@ -19,6 +19,23 @@ namespace BlockBuster.Interfaz
         {
             // Ejemplo de uso de la capa lógica desde la interfaz:
             // CargarPeliculas();
+        }
+
+        private void Form1_Load_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnSalir_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void BtnAceptar_Click(object sender, EventArgs e)
+        {
+            frmPrincipal frmPrincipal = new frmPrincipal();
+            frmPrincipal.Show();
+            this.Hide();
         }
 
         /*
