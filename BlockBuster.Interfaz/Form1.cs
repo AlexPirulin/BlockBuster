@@ -7,23 +7,32 @@ namespace BlockBuster.Interfaz
 {
     public partial class form1 : Form
     {
-        private readonly PeliculaLogica _peliculaLogica;
+        private readonly AuthService _authService;
 
         public form1()
         {
             InitializeComponent();
-            _peliculaLogica = new PeliculaLogica();
+            _authService = new AuthService();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            // Ejemplo de uso de la capa lógica desde la interfaz:
-            // CargarPeliculas();
         }
 
         private void Form1_Load_1(object sender, EventArgs e)
         {
+            // Asigna el botón Aceptar como botón predeterminado al presionar Enter
+            this.AcceptButton = this.BtnAceptar;
+        }
 
+        /// <summary>
+        /// Limpia las cajas de texto de credenciales para un nuevo inicio de sesión.
+        /// </summary>
+        public void LimpiarCampos()
+        {
+            txtUsuario.Clear();
+            txtContraseña.Clear();
+            txtUsuario.Focus();
         }
 
         private void btnSalir_Click(object sender, EventArgs e)
@@ -33,25 +42,60 @@ namespace BlockBuster.Interfaz
 
         private void BtnAceptar_Click(object sender, EventArgs e)
         {
-            frmPrincipal frmPrincipal = new frmPrincipal();
-            frmPrincipal.Show();
-            this.Hide();
-        }
+            string usuario = txtUsuario.Text.Trim();
+            string contrasena = txtContraseña.Text.Trim();
 
-        /*
-        // Ejemplo de método para listar datos en un DataGridView:
-        private void CargarPeliculas()
-        {
-            try
+            if (string.IsNullOrWhiteSpace(usuario))
             {
-                // La interfaz le pide los datos a la capa lógica
-                dataGridView1.DataSource = _peliculaLogica.ObtenerPeliculas();
+                MessageBox.Show(
+                    "Por favor, ingrese el nombre de usuario.",
+                    "Campo Requerido",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                txtUsuario.Focus();
+                return;
             }
-            catch (Exception ex)
+
+            if (string.IsNullOrWhiteSpace(contrasena))
             {
-                MessageBox.Show("Error al cargar datos: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    "Por favor, ingrese la contraseña.",
+                    "Campo Requerido",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                txtContraseña.Focus();
+                return;
+            }
+
+            // Uso de AuthService con método Login(usuario, password)
+            Usuario usuarioAutenticado = _authService.Login(usuario, contrasena);
+
+            if (usuarioAutenticado != null)
+            {
+                MessageBox.Show(
+                    $"¡Bienvenido(a), {SesionActual.NombreCompleto}!\nRol: {SesionActual.Rol}",
+                    "Inicio de Sesión Exitoso",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                // Abre la pantalla principal
+                frmPrincipal principal = new frmPrincipal();
+                principal.FormClosed += (s, args) => this.Close();
+                principal.Show();
+
+                this.Hide();
+            }
+            else
+            {
+                MessageBox.Show(
+                    "Usuario o contraseña incorrectos, o la cuenta se encuentra inactiva.",
+                    "Acceso Denegado",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                txtContraseña.Clear();
+                txtContraseña.Focus();
             }
         }
-        */
     }
 }

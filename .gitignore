@@ -107,6 +107,13 @@ ipch/
 *.ncb
 *.opendb
 *.opensdf
+# SQLite
+*.db
+*.sqlite
+*.sqlite3
+*.db-wal
+*.db-shm
+
 *.sdf
 *.cachefile
 *.VC.db

@@ -50,9 +50,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArticuloLogica.cs" />
+    <Compile Include="AuthService.cs" />
     <Compile Include="ClienteLogica.cs" />
     <Compile Include="PeliculaLogica.cs" />
+    <Compile Include="PermisosService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SesionActual.cs" />
     <Compile Include="UsuarioLogica.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
