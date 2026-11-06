@@ -49,23 +49,14 @@ namespace BlockBuster.Interfaz
         }
 
         /// <summary>
-        /// Aplica la autorización y permisos según el rol del usuario utilizando PermisosService.
+        /// Aplica la autorización para las ventanas.
+        /// Todos los roles tienen acceso a abrir las distintas ventanas (Renta, Venta y Compra).
         /// </summary>
         public void AplicarPermisos()
         {
-            bool puedeRentar = PermisosService.PuedeRealizarRentas();
-            bool puedeVender = PermisosService.PuedeRealizarVentas();
-            bool puedeComprar = PermisosService.PuedeRealizarCompras();
-
-            // Botones de la barra principal
-            btnRenta.Enabled = puedeRentar;
-            btnVenta.Enabled = puedeVender;
-            btnCompra.Enabled = puedeComprar;
-
-            // Opciones del menú superior
-            rentaToolStripMenuItem.Enabled = puedeRentar;
-            ventaToolStripMenuItem.Enabled = puedeVender;
-            compraToolStripMenuItem.Enabled = puedeComprar;
+            btnRenta.Enabled = true;
+            btnVenta.Enabled = true;
+            btnCompra.Enabled = true;
         }
 
         #region Eventos de Botones Principales
@@ -87,64 +78,34 @@ namespace BlockBuster.Interfaz
 
         #endregion
 
-        #region Eventos del Menú Superior
-
-        private void rentaToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            EjecutarOperacion("Renta");
-        }
-
-        private void ventaToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            EjecutarOperacion("Venta");
-        }
-
-        private void compraToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            EjecutarOperacion("Compra");
-        }
-
-        #endregion
-
         /// <summary>
-        /// Abre la ventana de selección de categoría pasando qué operación se eligió (Renta, Venta o Compra).
+        /// Abre la ventana de selección de categoría para la operación seleccionada (Renta, Venta o Compra).
+        /// Todos los roles tienen acceso y se utiliza el patrón Singleton para asegurar que no se abran
+        /// múltiples opciones o instancias a la vez.
         /// </summary>
         private void EjecutarOperacion(string operacion)
         {
-            // Verificación previa de permisos con PermisosService
-            string opLower = operacion?.ToLower() ?? "";
-            bool autorizado = true;
-
-            if (opLower.Contains("compra") && !PermisosService.PuedeRealizarCompras())
+            // Cierra cualquier otra ventana secundaria para que no se puedan abrir todas las opciones a la vez
+            foreach (Form hijo in this.MdiChildren)
             {
-                autorizado = false;
-            }
-            else if (opLower.Contains("venta") && !PermisosService.PuedeRealizarVentas())
-            {
-                autorizado = false;
-            }
-            else if (opLower.Contains("renta") && !PermisosService.PuedeRealizarRentas())
-            {
-                autorizado = false;
+                if (hijo != frmSeleccionCategoria.Instancia)
+                {
+                    hijo.Close();
+                }
             }
 
-            if (!autorizado)
-            {
-                MessageBox.Show(
-                    $"Su rol actual ({SesionActual.Rol}) no cuenta con permisos para realizar operaciones de {operacion}.",
-                    "Acceso Restringido",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-                return;
-            }
-
-            // Abre la ventana de selección de categorías dentro del contenedor MDI
-            frmSeleccionCategoria selector = new frmSeleccionCategoria(operacion);
+            // Abre o enfoca la instancia única de selección de categoría (Singleton)
+            frmSeleccionCategoria selector = frmSeleccionCategoria.ObtenerInstancia(operacion);
             selector.MdiParent = this;
             selector.Show();
+            selector.BringToFront();
+            selector.Activate();
         }
 
-        private void cerrarSesionToolStripMenuItem_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Cierra la sesión activa del usuario y retorna a la pantalla de Login.
+        /// </summary>
+        private void btnCerrarSesion_Click(object sender, EventArgs e)
         {
             DialogResult confirmacion = MessageBox.Show(
                 "¿Está seguro de que desea cerrar la sesión actual?",
@@ -157,14 +118,9 @@ namespace BlockBuster.Interfaz
                 // Limpia la sesión actual
                 SesionActual.CerrarSesion();
 
-                // Cierra la ventana principal; Program.cs vuelve a mostrar el login
+                // Cierra la ventana principal; Program.cs detecta el cierre de sesión y reabre Form1
                 this.Close();
             }
-        }
-
-        private void salirToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
         }
     }
 }

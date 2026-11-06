@@ -6,6 +6,39 @@ namespace BlockBuster.Interfaz
 {
     public partial class frmSeleccionCategoria : Form
     {
+        private static frmSeleccionCategoria _instancia;
+
+        /// <summary>
+        /// Obtiene la instancia única (Singleton) de la ventana de selección de categorías.
+        /// Evita abrir múltiples selectores o ventanas a la vez.
+        /// </summary>
+        public static frmSeleccionCategoria ObtenerInstancia(string operacion = "Renta")
+        {
+            if (_instancia == null || _instancia.IsDisposed)
+            {
+                _instancia = new frmSeleccionCategoria(operacion);
+            }
+            else
+            {
+                if (!string.IsNullOrWhiteSpace(operacion))
+                {
+                    _instancia.Operacion = operacion;
+                }
+                _instancia.ActualizarVista();
+
+                if (_instancia.WindowState == FormWindowState.Minimized)
+                {
+                    _instancia.WindowState = FormWindowState.Normal;
+                }
+                _instancia.BringToFront();
+                _instancia.Activate();
+            }
+
+            return _instancia;
+        }
+
+        public static frmSeleccionCategoria Instancia => _instancia;
+
         /// <summary>
         /// Operación seleccionada previamente ("Renta", "Venta" o "Compra").
         /// </summary>
@@ -27,8 +60,12 @@ namespace BlockBuster.Interfaz
 
         private void frmSeleccionCategoria_Load(object sender, EventArgs e)
         {
-            // Muestra en pantalla la operación elegida y la información de la sesión actual
-            lblOperacion.Text = $"Operación: {Operacion.ToUpper()}";
+            ActualizarVista();
+        }
+
+        public void ActualizarVista()
+        {
+            lblOperacion.Text = $"Operación: {Operacion?.ToUpper()}";
             this.Text = $"BlockBuster - Selección de Categoría para {Operacion}";
 
             if (SesionActual.EstaAutenticado)
@@ -54,7 +91,7 @@ namespace BlockBuster.Interfaz
 
         /// <summary>
         /// Abre la ventana de la operación correspondiente (Rentas, Ventas o Compras),
-        /// pasando la operación elegida y la categoría seleccionada.
+        /// utilizando Singleton para que no se puedan abrir todas las opciones a la vez.
         /// </summary>
         private void AbrirSiguienteVentana(string categoria)
         {
@@ -67,31 +104,49 @@ namespace BlockBuster.Interfaz
             {
                 case "renta":
                 case "rentas":
-                    frmDestino = new frmRentas(Operacion, categoria);
+                    frmDestino = frmRentas.ObtenerInstancia(Operacion, categoria);
                     break;
 
                 case "venta":
                 case "ventas":
-                    frmDestino = new frmVentas(Operacion, categoria);
+                    frmDestino = frmVentas.ObtenerInstancia(Operacion, categoria);
                     break;
 
                 case "compra":
                 case "compras":
-                    frmDestino = new frmCompras(Operacion, categoria);
+                    frmDestino = frmCompras.ObtenerInstancia(Operacion, categoria);
                     break;
 
                 default:
-                    frmDestino = new frmRentas(Operacion, categoria);
+                    frmDestino = frmRentas.ObtenerInstancia(Operacion, categoria);
                     break;
             }
 
             if (parentMdi != null)
             {
+                // Cerramos cualquier otra ventana hija para que solo haya una opción abierta
+                foreach (Form hijo in parentMdi.MdiChildren)
+                {
+                    if (hijo != frmDestino && hijo != this)
+                    {
+                        hijo.Close();
+                    }
+                }
+
                 frmDestino.MdiParent = parentMdi;
             }
 
+            // Cerramos el selector y mostramos la ventana de operación Singleton
             this.Close();
             frmDestino.Show();
+            frmDestino.BringToFront();
+            frmDestino.Activate();
+        }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            base.OnFormClosed(e);
+            _instancia = null;
         }
 
         private void btnVolver_Click(object sender, EventArgs e)
@@ -100,3 +155,4 @@ namespace BlockBuster.Interfaz
         }
     }
 }
+

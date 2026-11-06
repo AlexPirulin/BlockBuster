@@ -28,14 +28,6 @@ namespace BlockBuster.Interfaz
         /// </summary>
         private void InitializeComponent()
         {
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.operacionesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.rentaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ventaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.compraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sistemaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cerrarSesionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.salirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlHeader = new System.Windows.Forms.Panel();
             this.lblLogo = new System.Windows.Forms.Label();
             this.lblUsuarioActual = new System.Windows.Forms.Label();
@@ -50,77 +42,10 @@ namespace BlockBuster.Interfaz
             this.lblStatusUsuario = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatusRol = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatusInfo = new System.Windows.Forms.ToolStripStatusLabel();
-            this.menuStrip1.SuspendLayout();
             this.pnlHeader.SuspendLayout();
             this.pnlToolbar.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.operacionesToolStripMenuItem,
-            this.sistemaToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1150, 28);
-            this.menuStrip1.TabIndex = 0;
-            this.menuStrip1.Text = "menuStrip1";
-            // 
-            // operacionesToolStripMenuItem
-            // 
-            this.operacionesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.rentaToolStripMenuItem,
-            this.ventaToolStripMenuItem,
-            this.compraToolStripMenuItem});
-            this.operacionesToolStripMenuItem.Name = "operacionesToolStripMenuItem";
-            this.operacionesToolStripMenuItem.Size = new System.Drawing.Size(106, 24);
-            this.operacionesToolStripMenuItem.Text = "Operaciones";
-            // 
-            // rentaToolStripMenuItem
-            // 
-            this.rentaToolStripMenuItem.Name = "rentaToolStripMenuItem";
-            this.rentaToolStripMenuItem.Size = new System.Drawing.Size(144, 26);
-            this.rentaToolStripMenuItem.Text = "Renta";
-            this.rentaToolStripMenuItem.Click += new System.EventHandler(this.rentaToolStripMenuItem_Click);
-            // 
-            // ventaToolStripMenuItem
-            // 
-            this.ventaToolStripMenuItem.Name = "ventaToolStripMenuItem";
-            this.ventaToolStripMenuItem.Size = new System.Drawing.Size(144, 26);
-            this.ventaToolStripMenuItem.Text = "Venta";
-            this.ventaToolStripMenuItem.Click += new System.EventHandler(this.ventaToolStripMenuItem_Click);
-            // 
-            // compraToolStripMenuItem
-            // 
-            this.compraToolStripMenuItem.Name = "compraToolStripMenuItem";
-            this.compraToolStripMenuItem.Size = new System.Drawing.Size(144, 26);
-            this.compraToolStripMenuItem.Text = "Compra";
-            this.compraToolStripMenuItem.Click += new System.EventHandler(this.compraToolStripMenuItem_Click);
-            // 
-            // sistemaToolStripMenuItem
-            // 
-            this.sistemaToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.cerrarSesionToolStripMenuItem,
-            this.salirToolStripMenuItem});
-            this.sistemaToolStripMenuItem.Name = "sistemaToolStripMenuItem";
-            this.sistemaToolStripMenuItem.Size = new System.Drawing.Size(75, 24);
-            this.sistemaToolStripMenuItem.Text = "Sistema";
-            // 
-            // cerrarSesionToolStripMenuItem
-            // 
-            this.cerrarSesionToolStripMenuItem.Name = "cerrarSesionToolStripMenuItem";
-            this.cerrarSesionToolStripMenuItem.Size = new System.Drawing.Size(179, 26);
-            this.cerrarSesionToolStripMenuItem.Text = "Cerrar Sesión";
-            this.cerrarSesionToolStripMenuItem.Click += new System.EventHandler(this.cerrarSesionToolStripMenuItem_Click);
-            // 
-            // salirToolStripMenuItem
-            // 
-            this.salirToolStripMenuItem.Name = "salirToolStripMenuItem";
-            this.salirToolStripMenuItem.Size = new System.Drawing.Size(179, 26);
-            this.salirToolStripMenuItem.Text = "Salir";
-            this.salirToolStripMenuItem.Click += new System.EventHandler(this.salirToolStripMenuItem_Click);
             // 
             // pnlHeader
             // 
@@ -130,7 +55,7 @@ namespace BlockBuster.Interfaz
             this.pnlHeader.Controls.Add(this.lblUsuarioActual);
             this.pnlHeader.Controls.Add(this.lblLogo);
             this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlHeader.Location = new System.Drawing.Point(0, 28);
+            this.pnlHeader.Location = new System.Drawing.Point(0, 0);
             this.pnlHeader.Name = "pnlHeader";
             this.pnlHeader.Size = new System.Drawing.Size(1150, 75);
             this.pnlHeader.TabIndex = 1;
@@ -183,7 +108,7 @@ namespace BlockBuster.Interfaz
             this.btnCerrarSesion.TabIndex = 3;
             this.btnCerrarSesion.Text = "Cerrar Sesión";
             this.btnCerrarSesion.UseVisualStyleBackColor = false;
-            this.btnCerrarSesion.Click += new System.EventHandler(this.cerrarSesionToolStripMenuItem_Click);
+            this.btnCerrarSesion.Click += new System.EventHandler(this.btnCerrarSesion_Click);
             // 
             // pnlToolbar
             // 
@@ -193,7 +118,7 @@ namespace BlockBuster.Interfaz
             this.pnlToolbar.Controls.Add(this.btnRenta);
             this.pnlToolbar.Controls.Add(this.lblAccionesTitulo);
             this.pnlToolbar.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlToolbar.Location = new System.Drawing.Point(0, 103);
+            this.pnlToolbar.Location = new System.Drawing.Point(0, 75);
             this.pnlToolbar.Name = "pnlToolbar";
             this.pnlToolbar.Size = new System.Drawing.Size(1150, 70);
             this.pnlToolbar.TabIndex = 2;
@@ -303,16 +228,12 @@ namespace BlockBuster.Interfaz
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.pnlToolbar);
             this.Controls.Add(this.pnlHeader);
-            this.Controls.Add(this.menuStrip1);
             this.IsMdiContainer = true;
-            this.MainMenuStrip = this.menuStrip1;
             this.Name = "frmPrincipal";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "BlockBuster - Sistema Principal";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.frmPrincipal_Load);
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
             this.pnlHeader.ResumeLayout(false);
             this.pnlHeader.PerformLayout();
             this.pnlToolbar.ResumeLayout(false);
@@ -326,14 +247,6 @@ namespace BlockBuster.Interfaz
 
         #endregion
 
-        private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem operacionesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem ventaToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem compraToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem rentaToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem sistemaToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem cerrarSesionToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem salirToolStripMenuItem;
         private System.Windows.Forms.Panel pnlHeader;
         private System.Windows.Forms.Label lblLogo;
         private System.Windows.Forms.Label lblUsuarioActual;
