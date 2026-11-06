@@ -23,6 +23,9 @@ namespace BlockBuster.Interfaz
         {
             // Asigna el botón Aceptar como botón predeterminado al presionar Enter
             this.AcceptButton = this.BtnAceptar;
+
+            // Enfoca el campo de usuario al abrir la ventana
+            this.ActiveControl = this.txtUsuario;
         }
 
         /// <summary>
@@ -78,12 +81,8 @@ namespace BlockBuster.Interfaz
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
 
-                // Abre la pantalla principal
-                frmPrincipal principal = new frmPrincipal();
-                principal.FormClosed += (s, args) => this.Close();
-                principal.Show();
-
-                this.Hide();
+                // Cierra el login; Program.cs abre la ventana principal
+                this.DialogResult = DialogResult.OK;
             }
             else
             {

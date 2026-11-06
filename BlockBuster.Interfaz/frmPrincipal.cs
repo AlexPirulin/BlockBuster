@@ -157,12 +157,8 @@ namespace BlockBuster.Interfaz
                 // Limpia la sesión actual
                 SesionActual.CerrarSesion();
 
-                // Cierra la ventana principal y vuelve a la pantalla de login limpia
-                this.Hide();
-                form1 loginForm = new form1();
-                loginForm.FormClosed += (s, args) => this.Close();
-                loginForm.LimpiarCampos();
-                loginForm.Show();
+                // Cierra la ventana principal; Program.cs vuelve a mostrar el login
+                this.Close();
             }
         }
 
