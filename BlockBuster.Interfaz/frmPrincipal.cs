@@ -9,8 +9,6 @@ namespace BlockBuster.Interfaz
         public frmPrincipal()
         {
             InitializeComponent();
-            ActualizarInformacionUsuario();
-            AplicarPermisos();
         }
 
         private void frmPrincipal_Load(object sender, EventArgs e)
@@ -20,17 +18,33 @@ namespace BlockBuster.Interfaz
         }
 
         /// <summary>
-        /// Muestra en el título de la ventana el nombre completo y el rol del usuario que inició sesión.
+        /// Muestra en la ventana principal el nombre completo y el rol guardados en SesionActual.
         /// </summary>
         public void ActualizarInformacionUsuario()
         {
             if (SesionActual.EstaAutenticado)
             {
-                this.Text = $"BlockBuster - Sistema Principal | Usuario: {SesionActual.NombreCompleto} ({SesionActual.NombreUsuario}) | Rol: {SesionActual.Rol}";
+                string infoUsuario = $"{SesionActual.NombreCompleto} ({SesionActual.NombreUsuario})";
+                string infoRol = SesionActual.Rol;
+
+                // 1. Título de la ventana
+                this.Text = $"BlockBuster - Sistema Principal | Usuario: {infoUsuario} | Rol: {infoRol}";
+
+                // 2. Etiquetas visuales en el panel superior
+                lblUsuarioActual.Text = $"Usuario: {infoUsuario}";
+                lblRolActual.Text = $"Rol: {infoRol}";
+
+                // 3. Barra de estado inferior
+                lblStatusUsuario.Text = $"Usuario: {infoUsuario}";
+                lblStatusRol.Text = $"Rol: {infoRol}";
             }
             else
             {
                 this.Text = "BlockBuster - Sistema Principal | Sesión no iniciada";
+                lblUsuarioActual.Text = "Usuario: No autenticado";
+                lblRolActual.Text = "Rol: -";
+                lblStatusUsuario.Text = "Usuario: -";
+                lblStatusRol.Text = "Rol: -";
             }
         }
 
@@ -39,49 +53,95 @@ namespace BlockBuster.Interfaz
         /// </summary>
         public void AplicarPermisos()
         {
-            // Opciones del menú según permisos del rol
-            compraToolStripMenuItem.Enabled = PermisosService.PuedeRealizarCompras();
-            ventaToolStripMenuItem.Enabled = PermisosService.PuedeRealizarVentas();
-            rentaToolStripMenuItem.Enabled = PermisosService.PuedeRealizarRentas();
+            bool puedeRentar = PermisosService.PuedeRealizarRentas();
+            bool puedeVender = PermisosService.PuedeRealizarVentas();
+            bool puedeComprar = PermisosService.PuedeRealizarCompras();
+
+            // Botones de la barra principal
+            btnRenta.Enabled = puedeRentar;
+            btnVenta.Enabled = puedeVender;
+            btnCompra.Enabled = puedeComprar;
+
+            // Opciones del menú superior
+            rentaToolStripMenuItem.Enabled = puedeRentar;
+            ventaToolStripMenuItem.Enabled = puedeVender;
+            compraToolStripMenuItem.Enabled = puedeComprar;
+        }
+
+        #region Eventos de Botones Principales
+
+        private void btnRenta_Click(object sender, EventArgs e)
+        {
+            EjecutarOperacion("Renta");
+        }
+
+        private void btnVenta_Click(object sender, EventArgs e)
+        {
+            EjecutarOperacion("Venta");
+        }
+
+        private void btnCompra_Click(object sender, EventArgs e)
+        {
+            EjecutarOperacion("Compra");
+        }
+
+        #endregion
+
+        #region Eventos del Menú Superior
+
+        private void rentaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            EjecutarOperacion("Renta");
         }
 
         private void ventaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!PermisosService.PuedeRealizarVentas())
-            {
-                MessageBox.Show("No cuenta con permisos para acceder al módulo de ventas.", "Acceso Restringido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            frmVentas frmVentas = new frmVentas();
-            frmVentas.MdiParent = this;
-            frmVentas.Show();
+            EjecutarOperacion("Venta");
         }
 
         private void compraToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!PermisosService.PuedeRealizarCompras())
-            {
-                MessageBox.Show("No cuenta con permisos para acceder al módulo de compras.", "Acceso Restringido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            frmCompras frmCompras = new frmCompras();
-            frmCompras.MdiParent = this;
-            frmCompras.Show();
+            EjecutarOperacion("Compra");
         }
 
-        private void rentaToolStripMenuItem_Click(object sender, EventArgs e)
+        #endregion
+
+        /// <summary>
+        /// Abre la ventana de selección de categoría pasando qué operación se eligió (Renta, Venta o Compra).
+        /// </summary>
+        private void EjecutarOperacion(string operacion)
         {
-            if (!PermisosService.PuedeRealizarRentas())
+            // Verificación previa de permisos con PermisosService
+            string opLower = operacion?.ToLower() ?? "";
+            bool autorizado = true;
+
+            if (opLower.Contains("compra") && !PermisosService.PuedeRealizarCompras())
             {
-                MessageBox.Show("No cuenta con permisos para acceder al módulo de rentas.", "Acceso Restringido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                autorizado = false;
+            }
+            else if (opLower.Contains("venta") && !PermisosService.PuedeRealizarVentas())
+            {
+                autorizado = false;
+            }
+            else if (opLower.Contains("renta") && !PermisosService.PuedeRealizarRentas())
+            {
+                autorizado = false;
+            }
+
+            if (!autorizado)
+            {
+                MessageBox.Show(
+                    $"Su rol actual ({SesionActual.Rol}) no cuenta con permisos para realizar operaciones de {operacion}.",
+                    "Acceso Restringido",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 
-            frmRentas frmRentas = new frmRentas();
-            frmRentas.MdiParent = this;
-            frmRentas.Show();
+            // Abre la ventana de selección de categorías dentro del contenedor MDI
+            frmSeleccionCategoria selector = new frmSeleccionCategoria(operacion);
+            selector.MdiParent = this;
+            selector.Show();
         }
 
         private void cerrarSesionToolStripMenuItem_Click(object sender, EventArgs e)

@@ -81,6 +81,12 @@
     <Compile Include="frmRentas.Designer.cs">
       <DependentUpon>frmRentas.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmSeleccionCategoria.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSeleccionCategoria.Designer.cs">
+      <DependentUpon>frmSeleccionCategoria.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmVentas.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -100,6 +106,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmRentas.resx">
       <DependentUpon>frmRentas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSeleccionCategoria.resx">
+      <DependentUpon>frmSeleccionCategoria.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmVentas.resx">
       <DependentUpon>frmVentas.cs</DependentUpon>
