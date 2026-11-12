@@ -15,6 +15,33 @@ namespace BlockBuster.Interfaz
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            // Manejo global de excepciones para evitar cierres abruptos
+            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+            AppDomain.CurrentDomain.UnhandledException += (s, args) =>
+            {
+                var ex = args.ExceptionObject as Exception;
+                MessageBox.Show(
+                    "Ocurrió un error en el sistema:\n" + (ex?.Message ?? "Error no identificado"),
+                    "BlockBuster - Advertencia",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            };
+
+            // Inicialización segura de la base de datos y de imágenes de prueba
+            try
+            {
+                BlockBuster.Datos.InicializadorBD.Inicializar();
+                BlockBuster.Logica.ImagenService.AsegurarImagenesSemilla();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Aviso al iniciar la base de datos:\n" + ex.Message + "\n\nLa aplicación continuará en modo seguro.",
+                    "BlockBuster - Conexión de Datos",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
+
             while (true)
             {
                 using (form1 login = new form1())

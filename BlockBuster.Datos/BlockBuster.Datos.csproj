@@ -53,6 +53,7 @@
     <Compile Include="BlockBusterDbContext.cs" />
     <Compile Include="ClienteDatos.cs" />
     <Compile Include="ConexionBD.cs" />
+    <Compile Include="InicializadorBD.cs" />
     <Compile Include="Entidades\Articulo.cs" />
     <Compile Include="Entidades\Cliente.cs" />
     <Compile Include="Entidades\Pelicula.cs" />

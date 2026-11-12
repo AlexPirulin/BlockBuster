@@ -120,6 +120,7 @@ namespace BlockBuster.Datos
                 entity.Property(e => e.PrecioVenta).HasColumnType("DECIMAL(10,2)");
                 entity.Property(e => e.Stock).IsRequired();
                 entity.Property(e => e.Activo).HasDefaultValue(true);
+                entity.Property(e => e.RutaImagen).HasMaxLength(250);
 
                 entity.HasData(
                     new Articulo
@@ -173,24 +174,12 @@ namespace BlockBuster.Datos
         }
 
         /// <summary>
-        /// Asegura que la base de datos esté creada y los usuarios iniciales existan.
+        /// Asegura que la base de datos esté creada y los usuarios, clientes y artículos iniciales existan.
+        /// Maneja errores de base de datos de forma segura para que la aplicación no se cierre.
         /// </summary>
         public static void InicializarBaseDatos()
         {
-            using (var db = new BlockBusterDbContext())
-            {
-                db.Database.EnsureCreated();
-
-                if (!db.Usuarios.Any())
-                {
-                    db.Usuarios.AddRange(
-                        new Usuario { NombreUsuario = "admin", Contrasena = "admin123", NombreCompleto = "Administrador del Sistema", Rol = "Administrador", Activo = true },
-                        new Usuario { NombreUsuario = "caja", Contrasena = "caja123", NombreCompleto = "Cajero de Turno", Rol = "Caja", Activo = true },
-                        new Usuario { NombreUsuario = "cliente", Contrasena = "cliente123", NombreCompleto = "Cliente Predeterminado", Rol = "Cliente", Activo = true }
-                    );
-                    db.SaveChanges();
-                }
-            }
+            InicializadorBD.Inicializar();
         }
     }
 }

@@ -90,57 +90,35 @@ namespace BlockBuster.Interfaz
         }
 
         /// <summary>
-        /// Abre la ventana de la operación correspondiente (Rentas, Ventas o Compras),
-        /// utilizando Singleton para que no se puedan abrir todas las opciones a la vez.
+        /// Abre el catálogo con tarjetas para la operación correspondiente (Rentas, Ventas o Compras),
+        /// con la categoría ya filtrada y utilizando el patrón Singleton.
         /// </summary>
         private void AbrirSiguienteVentana(string categoria)
         {
-            Form frmDestino = null;
             Form parentMdi = this.MdiParent;
 
-            string opNormalizada = Operacion?.Trim().ToLower() ?? "renta";
-
-            switch (opNormalizada)
-            {
-                case "renta":
-                case "rentas":
-                    frmDestino = frmRentas.ObtenerInstancia(Operacion, categoria);
-                    break;
-
-                case "venta":
-                case "ventas":
-                    frmDestino = frmVentas.ObtenerInstancia(Operacion, categoria);
-                    break;
-
-                case "compra":
-                case "compras":
-                    frmDestino = frmCompras.ObtenerInstancia(Operacion, categoria);
-                    break;
-
-                default:
-                    frmDestino = frmRentas.ObtenerInstancia(Operacion, categoria);
-                    break;
-            }
+            // Abre el catálogo con la operación y la categoría pre-filtrada
+            frmCatalogo catalogo = frmCatalogo.ObtenerInstancia(Operacion, categoria);
 
             if (parentMdi != null)
             {
                 // Cerramos cualquier otra ventana hija para que solo haya una opción abierta
                 foreach (Form hijo in parentMdi.MdiChildren)
                 {
-                    if (hijo != frmDestino && hijo != this)
+                    if (hijo != catalogo && hijo != this)
                     {
                         hijo.Close();
                     }
                 }
 
-                frmDestino.MdiParent = parentMdi;
+                catalogo.MdiParent = parentMdi;
             }
 
-            // Cerramos el selector y mostramos la ventana de operación Singleton
+            // Cerramos el selector y mostramos el catálogo Singleton
             this.Close();
-            frmDestino.Show();
-            frmDestino.BringToFront();
-            frmDestino.Activate();
+            catalogo.Show();
+            catalogo.BringToFront();
+            catalogo.Activate();
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)

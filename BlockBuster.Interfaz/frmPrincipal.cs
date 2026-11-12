@@ -49,14 +49,18 @@ namespace BlockBuster.Interfaz
         }
 
         /// <summary>
-        /// Aplica la autorización para las ventanas.
-        /// Todos los roles tienen acceso a abrir las distintas ventanas (Renta, Venta y Compra).
+        /// Aplica la autorización para las ventanas y botones según los métodos de PermisosService.
+        /// Inventario es exclusivo para Administrador; Registro de Clientes para Admin y Caja.
         /// </summary>
         public void AplicarPermisos()
         {
             btnRenta.Enabled = true;
             btnVenta.Enabled = true;
             btnCompra.Enabled = true;
+
+            // Mostrar u ocultar opciones según PermisosService
+            btnInventario.Visible = PermisosService.PuedeEditarInventario();
+            btnClientes.Visible = PermisosService.EsAdministrador() || PermisosService.EsCajero();
         }
 
         #region Eventos de Botones Principales
@@ -74,6 +78,64 @@ namespace BlockBuster.Interfaz
         private void btnCompra_Click(object sender, EventArgs e)
         {
             EjecutarOperacion("Compra");
+        }
+
+        private void btnInventario_Click(object sender, EventArgs e)
+        {
+            // Validación de permisos en la capa lógica
+            if (!PermisosService.PuedeEditarInventario())
+            {
+                MessageBox.Show(
+                    $"Su rol actual '{SesionActual.Rol}' no cuenta con permisos para gestionar el inventario.",
+                    "Acceso Denegado",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Cerrar cualquier otra ventana hija para mantener una sola activa (Singleton)
+            foreach (Form hijo in this.MdiChildren)
+            {
+                if (hijo != frmInventario.Instancia)
+                {
+                    hijo.Close();
+                }
+            }
+
+            frmInventario inventario = frmInventario.ObtenerInstancia();
+            inventario.MdiParent = this;
+            inventario.Show();
+            inventario.BringToFront();
+            inventario.Activate();
+        }
+
+        private void btnClientes_Click(object sender, EventArgs e)
+        {
+            // Validación de permisos en la capa lógica
+            if (!PermisosService.EsAdministrador() && !PermisosService.EsCajero())
+            {
+                MessageBox.Show(
+                    $"Su rol actual '{SesionActual.Rol}' no cuenta con permisos para gestionar clientes.",
+                    "Acceso Denegado",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Cerrar cualquier otra ventana secundaria para mantener el espacio limpio
+            foreach (Form hijo in this.MdiChildren)
+            {
+                if (hijo != frmRegistroCliente.Instancia)
+                {
+                    hijo.Close();
+                }
+            }
+
+            frmRegistroCliente clientes = frmRegistroCliente.ObtenerInstancia();
+            clientes.MdiParent = this;
+            clientes.Show();
+            clientes.BringToFront();
+            clientes.Activate();
         }
 
         #endregion

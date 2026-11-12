@@ -39,6 +39,7 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -50,8 +51,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArticuloLogica.cs" />
+    <Compile Include="ArticuloService.cs" />
     <Compile Include="AuthService.cs" />
     <Compile Include="ClienteLogica.cs" />
+    <Compile Include="ClienteService.cs" />
+    <Compile Include="ImagenService.cs" />
     <Compile Include="PeliculaLogica.cs" />
     <Compile Include="PermisosService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

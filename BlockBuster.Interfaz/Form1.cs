@@ -70,8 +70,21 @@ namespace BlockBuster.Interfaz
                 return;
             }
 
-            // Uso de AuthService con método Login(usuario, password)
-            Usuario usuarioAutenticado = _authService.Login(usuario, contrasena);
+            Usuario usuarioAutenticado = null;
+            try
+            {
+                // Uso de AuthService con método Login(usuario, password)
+                usuarioAutenticado = _authService.Login(usuario, contrasena);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Error al intentar conectar con la base de datos:\n" + ex.Message + "\n\nPor favor, verifique el archivo de base de datos.",
+                    "Error de Conexión",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return;
+            }
 
             if (usuarioAutenticado != null)
             {

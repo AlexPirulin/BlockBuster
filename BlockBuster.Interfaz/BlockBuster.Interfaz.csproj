@@ -63,17 +63,41 @@
     <Compile Include="form1.Designer.cs">
       <DependentUpon>form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmArticuloForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmArticuloForm.Designer.cs">
+      <DependentUpon>frmArticuloForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmCatalogo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCatalogo.Designer.cs">
+      <DependentUpon>frmCatalogo.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmCompras.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="frmCompras.Designer.cs">
       <DependentUpon>frmCompras.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmInventario.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmInventario.Designer.cs">
+      <DependentUpon>frmInventario.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmPrincipal.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="frmPrincipal.Designer.cs">
       <DependentUpon>frmPrincipal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmRegistroCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmRegistroCliente.Designer.cs">
+      <DependentUpon>frmRegistroCliente.cs</DependentUpon>
     </Compile>
     <Compile Include="frmRentas.cs">
       <SubType>Form</SubType>
@@ -98,11 +122,23 @@
     <EmbeddedResource Include="form1.resx">
       <DependentUpon>form1.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmArticuloForm.resx">
+      <DependentUpon>frmArticuloForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCatalogo.resx">
+      <DependentUpon>frmCatalogo.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmCompras.resx">
       <DependentUpon>frmCompras.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmInventario.resx">
+      <DependentUpon>frmInventario.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmPrincipal.resx">
       <DependentUpon>frmPrincipal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmRegistroCliente.resx">
+      <DependentUpon>frmRegistroCliente.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmRentas.resx">
       <DependentUpon>frmRentas.cs</DependentUpon>

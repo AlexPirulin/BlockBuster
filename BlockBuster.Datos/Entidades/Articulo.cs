@@ -32,11 +32,14 @@ namespace BlockBuster.Datos.Entidades
 
         public bool Activo { get; set; } = true;
 
+        [StringLength(250)]
+        public string RutaImagen { get; set; }
+
         public Articulo()
         {
         }
 
-        public Articulo(string codigo, string titulo, string tipo, string genero, decimal precioRenta, decimal precioVenta, int stock)
+        public Articulo(string codigo, string titulo, string tipo, string genero, decimal precioRenta, decimal precioVenta, int stock, string rutaImagen = null)
         {
             Codigo = codigo;
             Titulo = titulo;
@@ -46,6 +49,7 @@ namespace BlockBuster.Datos.Entidades
             PrecioVenta = precioVenta;
             Stock = stock;
             Activo = true;
+            RutaImagen = rutaImagen;
         }
     }
 }

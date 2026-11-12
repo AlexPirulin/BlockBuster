@@ -18,12 +18,27 @@ namespace BlockBuster.Datos
         /// </summary>
         public Usuario ValidarCredenciales(string nombreUsuario, string contrasena)
         {
-            using (var db = new BlockBusterDbContext())
+            if (string.IsNullOrWhiteSpace(nombreUsuario) || string.IsNullOrWhiteSpace(contrasena))
             {
-                return db.Usuarios.AsNoTracking()
-                    .FirstOrDefault(u => u.NombreUsuario == nombreUsuario 
-                                      && u.Contrasena == contrasena 
-                                      && u.Activo);
+                return null;
+            }
+
+            try
+            {
+                string uNorm = nombreUsuario.Trim().ToLower();
+                string pNorm = contrasena.Trim();
+
+                using (var db = new BlockBusterDbContext())
+                {
+                    return db.Usuarios.AsNoTracking()
+                        .FirstOrDefault(u => u.NombreUsuario.ToLower() == uNorm 
+                                          && u.Contrasena == pNorm 
+                                          && u.Activo);
+                }
+            }
+            catch
+            {
+                return null;
             }
         }
 

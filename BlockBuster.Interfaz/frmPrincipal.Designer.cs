@@ -38,6 +38,8 @@ namespace BlockBuster.Interfaz
             this.btnRenta = new System.Windows.Forms.Button();
             this.btnVenta = new System.Windows.Forms.Button();
             this.btnCompra = new System.Windows.Forms.Button();
+            this.btnInventario = new System.Windows.Forms.Button();
+            this.btnClientes = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblStatusUsuario = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatusRol = new System.Windows.Forms.ToolStripStatusLabel();
@@ -113,6 +115,8 @@ namespace BlockBuster.Interfaz
             // pnlToolbar
             // 
             this.pnlToolbar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(50)))), ((int)(((byte)(80)))));
+            this.pnlToolbar.Controls.Add(this.btnClientes);
+            this.pnlToolbar.Controls.Add(this.btnInventario);
             this.pnlToolbar.Controls.Add(this.btnCompra);
             this.pnlToolbar.Controls.Add(this.btnVenta);
             this.pnlToolbar.Controls.Add(this.btnRenta);
@@ -145,7 +149,7 @@ namespace BlockBuster.Interfaz
             this.btnRenta.ForeColor = System.Drawing.Color.White;
             this.btnRenta.Location = new System.Drawing.Point(180, 10);
             this.btnRenta.Name = "btnRenta";
-            this.btnRenta.Size = new System.Drawing.Size(170, 48);
+            this.btnRenta.Size = new System.Drawing.Size(160, 48);
             this.btnRenta.TabIndex = 1;
             this.btnRenta.Text = "🔄 RENTA";
             this.btnRenta.UseVisualStyleBackColor = false;
@@ -160,9 +164,9 @@ namespace BlockBuster.Interfaz
             this.btnVenta.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnVenta.Font = new System.Drawing.Font("Arial Rounded MT Bold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnVenta.ForeColor = System.Drawing.Color.White;
-            this.btnVenta.Location = new System.Drawing.Point(375, 10);
+            this.btnVenta.Location = new System.Drawing.Point(355, 10);
             this.btnVenta.Name = "btnVenta";
-            this.btnVenta.Size = new System.Drawing.Size(170, 48);
+            this.btnVenta.Size = new System.Drawing.Size(160, 48);
             this.btnVenta.TabIndex = 2;
             this.btnVenta.Text = "🛒 VENTA";
             this.btnVenta.UseVisualStyleBackColor = false;
@@ -177,13 +181,47 @@ namespace BlockBuster.Interfaz
             this.btnCompra.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCompra.Font = new System.Drawing.Font("Arial Rounded MT Bold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCompra.ForeColor = System.Drawing.Color.White;
-            this.btnCompra.Location = new System.Drawing.Point(570, 10);
+            this.btnCompra.Location = new System.Drawing.Point(530, 10);
             this.btnCompra.Name = "btnCompra";
-            this.btnCompra.Size = new System.Drawing.Size(170, 48);
+            this.btnCompra.Size = new System.Drawing.Size(160, 48);
             this.btnCompra.TabIndex = 3;
             this.btnCompra.Text = "📦 COMPRA";
             this.btnCompra.UseVisualStyleBackColor = false;
             this.btnCompra.Click += new System.EventHandler(this.btnCompra_Click);
+            // 
+            // btnInventario
+            // 
+            this.btnInventario.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(110)))), ((int)(((byte)(50)))), ((int)(((byte)(140)))));
+            this.btnInventario.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnInventario.FlatAppearance.BorderColor = System.Drawing.Color.Gold;
+            this.btnInventario.FlatAppearance.BorderSize = 2;
+            this.btnInventario.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnInventario.Font = new System.Drawing.Font("Arial Rounded MT Bold", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnInventario.ForeColor = System.Drawing.Color.White;
+            this.btnInventario.Location = new System.Drawing.Point(705, 10);
+            this.btnInventario.Name = "btnInventario";
+            this.btnInventario.Size = new System.Drawing.Size(185, 48);
+            this.btnInventario.TabIndex = 4;
+            this.btnInventario.Text = "⚙️ INVENTARIO";
+            this.btnInventario.UseVisualStyleBackColor = false;
+            this.btnInventario.Click += new System.EventHandler(this.btnInventario_Click);
+            // 
+            // btnClientes
+            // 
+            this.btnClientes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(110)))), ((int)(((byte)(120)))));
+            this.btnClientes.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnClientes.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.btnClientes.FlatAppearance.BorderSize = 2;
+            this.btnClientes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnClientes.Font = new System.Drawing.Font("Arial Rounded MT Bold", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnClientes.ForeColor = System.Drawing.Color.White;
+            this.btnClientes.Location = new System.Drawing.Point(905, 10);
+            this.btnClientes.Name = "btnClientes";
+            this.btnClientes.Size = new System.Drawing.Size(165, 48);
+            this.btnClientes.TabIndex = 5;
+            this.btnClientes.Text = "👥 CLIENTES";
+            this.btnClientes.UseVisualStyleBackColor = false;
+            this.btnClientes.Click += new System.EventHandler(this.btnClientes_Click);
             // 
             // statusStrip1
             // 
@@ -257,6 +295,8 @@ namespace BlockBuster.Interfaz
         private System.Windows.Forms.Button btnRenta;
         private System.Windows.Forms.Button btnVenta;
         private System.Windows.Forms.Button btnCompra;
+        private System.Windows.Forms.Button btnInventario;
+        private System.Windows.Forms.Button btnClientes;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel lblStatusUsuario;
         private System.Windows.Forms.ToolStripStatusLabel lblStatusRol;
