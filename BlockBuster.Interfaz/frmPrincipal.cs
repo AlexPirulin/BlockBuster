@@ -184,5 +184,15 @@ namespace BlockBuster.Interfaz
                 this.Close();
             }
         }
+
+        private void lblUsuarioActual_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pnlHeader_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }
