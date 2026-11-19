@@ -350,18 +350,6 @@ namespace BlockBuster.Interfaz
             }
         }
 
-        private void dgvUsuarios_SelectionChanged(object sender, EventArgs e)
-        {
-            if (dgvUsuarios.SelectedRows.Count > 0)
-            {
-                Usuario usuario = dgvUsuarios.SelectedRows[0].DataBoundItem as Usuario;
-                if (usuario != null)
-                {
-                    CargarUsuarioParaEdicion(usuario);
-                }
-            }
-        }
-
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             CargarUsuarios();

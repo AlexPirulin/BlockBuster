@@ -175,29 +175,9 @@ namespace BlockBuster.Interfaz
             _instancia = null;
         }
 
-        private void pnlLista_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void dgvClientes_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
-        private void pnlFormulario_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
         private void txtBuscar_TextChanged(object sender, EventArgs e)
         {
-
-        }
-
-        private void lblListaTitulo_Click(object sender, EventArgs e)
-        {
-
+            btnBuscar_Click(sender, e);
         }
     }
 }

@@ -119,7 +119,7 @@ namespace BlockBuster.Interfaz
             this.Controls.Add(this.label1);
             this.Name = "form1";
             this.Text = "BlockBuster - Gestión de Películas";
-            this.Load += new System.EventHandler(this.Form1_Load_1);
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -62,7 +62,6 @@ namespace BlockBuster.Interfaz
             this.pnlHeader.Name = "pnlHeader";
             this.pnlHeader.Size = new System.Drawing.Size(1150, 75);
             this.pnlHeader.TabIndex = 1;
-            this.pnlHeader.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlHeader_Paint);
             // 
             // btnCerrarSesion
             // 
@@ -102,7 +101,6 @@ namespace BlockBuster.Interfaz
             this.lblUsuarioActual.Size = new System.Drawing.Size(97, 22);
             this.lblUsuarioActual.TabIndex = 1;
             this.lblUsuarioActual.Text = "Usuario: -";
-            this.lblUsuarioActual.Click += new System.EventHandler(this.lblUsuarioActual_Click);
             // 
             // lblLogo
             // 

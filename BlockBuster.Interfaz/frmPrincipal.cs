@@ -97,20 +97,7 @@ namespace BlockBuster.Interfaz
                 return;
             }
 
-            // Cerrar cualquier otra ventana hija para mantener una sola activa (Singleton)
-            foreach (Form hijo in this.MdiChildren)
-            {
-                if (hijo != frmInventario.Instancia)
-                {
-                    hijo.Close();
-                }
-            }
-
-            frmInventario inventario = frmInventario.ObtenerInstancia();
-            inventario.MdiParent = this;
-            inventario.Show();
-            inventario.BringToFront();
-            inventario.Activate();
+            AbrirVentanaMdi(frmInventario.ObtenerInstancia());
         }
 
         private void btnUsuarios_Click(object sender, EventArgs e)
@@ -126,20 +113,7 @@ namespace BlockBuster.Interfaz
                 return;
             }
 
-            // Cerrar cualquier otra ventana hija para mantener una sola activa (Singleton)
-            foreach (Form hijo in this.MdiChildren)
-            {
-                if (hijo != fmrRegistroUsuario.Instancia)
-                {
-                    hijo.Close();
-                }
-            }
-
-            fmrRegistroUsuario usuarios = fmrRegistroUsuario.ObtenerInstancia();
-            usuarios.MdiParent = this;
-            usuarios.Show();
-            usuarios.BringToFront();
-            usuarios.Activate();
+            AbrirVentanaMdi(fmrRegistroUsuario.ObtenerInstancia());
         }
 
         private void btnClientes_Click(object sender, EventArgs e)
@@ -155,20 +129,7 @@ namespace BlockBuster.Interfaz
                 return;
             }
 
-            // Cerrar cualquier otra ventana secundaria para mantener el espacio limpio
-            foreach (Form hijo in this.MdiChildren)
-            {
-                if (hijo != frmRegistroCliente.Instancia)
-                {
-                    hijo.Close();
-                }
-            }
-
-            frmRegistroCliente clientes = frmRegistroCliente.ObtenerInstancia();
-            clientes.MdiParent = this;
-            clientes.Show();
-            clientes.BringToFront();
-            clientes.Activate();
+            AbrirVentanaMdi(frmRegistroCliente.ObtenerInstancia());
         }
 
         #endregion
@@ -180,21 +141,29 @@ namespace BlockBuster.Interfaz
         /// </summary>
         private void EjecutarOperacion(string operacion)
         {
-            // Cierra cualquier otra ventana secundaria para que no se puedan abrir todas las opciones a la vez
+            AbrirVentanaMdi(frmSeleccionCategoria.ObtenerInstancia(operacion));
+        }
+
+        /// <summary>
+        /// Cierra cualquier otra ventana secundaria para mantener una sola activa a la vez (Singleton)
+        /// y presenta la ventana MDI solicitada en primer plano.
+        /// </summary>
+        private void AbrirVentanaMdi(Form ventana)
+        {
+            if (ventana == null) return;
+
             foreach (Form hijo in this.MdiChildren)
             {
-                if (hijo != frmSeleccionCategoria.Instancia)
+                if (hijo != ventana)
                 {
                     hijo.Close();
                 }
             }
 
-            // Abre o enfoca la instancia única de selección de categoría (Singleton)
-            frmSeleccionCategoria selector = frmSeleccionCategoria.ObtenerInstancia(operacion);
-            selector.MdiParent = this;
-            selector.Show();
-            selector.BringToFront();
-            selector.Activate();
+            ventana.MdiParent = this;
+            ventana.Show();
+            ventana.BringToFront();
+            ventana.Activate();
         }
 
         /// <summary>
@@ -216,16 +185,6 @@ namespace BlockBuster.Interfaz
                 // Cierra la ventana principal; Program.cs detecta el cierre de sesión y reabre Form1
                 this.Close();
             }
-        }
-
-        private void lblUsuarioActual_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void pnlHeader_Paint(object sender, PaintEventArgs e)
-        {
-
         }
     }
 }

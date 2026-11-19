@@ -335,7 +335,6 @@
             this.dgvUsuarios.Size = new System.Drawing.Size(948, 275);
             this.dgvUsuarios.TabIndex = 3;
             this.dgvUsuarios.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUsuarios_CellClick);
-            this.dgvUsuarios.SelectionChanged += new System.EventHandler(this.dgvUsuarios_SelectionChanged);
             // 
             // btnBuscar
             // 

@@ -17,10 +17,6 @@ namespace BlockBuster.Interfaz
 
         private void Form1_Load(object sender, EventArgs e)
         {
-        }
-
-        private void Form1_Load_1(object sender, EventArgs e)
-        {
             // Asigna el botón Aceptar como botón predeterminado al presionar Enter
             this.AcceptButton = this.BtnAceptar;
 

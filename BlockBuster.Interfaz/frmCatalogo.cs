@@ -103,7 +103,14 @@ namespace BlockBuster.Interfaz
                 List<Articulo> articulos = _articuloService.Buscar(texto, categoria, soloDisponibles);
 
                 flpTarjetas.SuspendLayout();
-                flpTarjetas.Controls.Clear();
+
+                // Liberar recursos GDI de tarjetas anteriores para optimizar memoria
+                while (flpTarjetas.Controls.Count > 0)
+                {
+                    Control c = flpTarjetas.Controls[0];
+                    flpTarjetas.Controls.RemoveAt(0);
+                    c.Dispose();
+                }
 
                 lblContador.Text = $"Artículos: {articulos.Count}";
 

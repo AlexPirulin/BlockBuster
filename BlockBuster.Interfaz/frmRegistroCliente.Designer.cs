@@ -100,7 +100,6 @@ namespace BlockBuster.Interfaz
             this.pnlFormulario.Name = "pnlFormulario";
             this.pnlFormulario.Size = new System.Drawing.Size(900, 200);
             this.pnlFormulario.TabIndex = 1;
-            this.pnlFormulario.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlFormulario_Paint);
             // 
             // btnCerrar
             // 
@@ -255,7 +254,6 @@ namespace BlockBuster.Interfaz
             this.pnlLista.Name = "pnlLista";
             this.pnlLista.Size = new System.Drawing.Size(900, 285);
             this.pnlLista.TabIndex = 2;
-            this.pnlLista.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlLista_Paint);
             // 
             // dgvClientes
             // 
@@ -275,7 +273,6 @@ namespace BlockBuster.Interfaz
             this.dgvClientes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvClientes.Size = new System.Drawing.Size(860, 230);
             this.dgvClientes.TabIndex = 3;
-            this.dgvClientes.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvClientes_CellContentClick);
             // 
             // btnBuscar
             // 
@@ -311,7 +308,6 @@ namespace BlockBuster.Interfaz
             this.lblListaTitulo.Size = new System.Drawing.Size(206, 22);
             this.lblListaTitulo.TabIndex = 0;
             this.lblListaTitulo.Text = "Clientes Registrados:";
-            this.lblListaTitulo.Click += new System.EventHandler(this.lblListaTitulo_Click);
             // 
             // frmRegistroCliente
             // 
