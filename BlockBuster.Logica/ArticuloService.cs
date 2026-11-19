@@ -115,9 +115,9 @@ namespace BlockBuster.Logica
         }
 
         /// <summary>
-        /// Valida reglas de negocio y permisos en la lógica, y guarda un nuevo artículo.
+        /// Valida reglas de negocio y permisos en la lógica, y agrega un nuevo artículo.
         /// </summary>
-        public bool Guardar(Articulo articulo, out string mensajeError)
+        public bool Agregar(Articulo articulo, out string mensajeError)
         {
             mensajeError = string.Empty;
 
@@ -154,6 +154,22 @@ namespace BlockBuster.Logica
 
             try
             {
+                string tituloNorm = articulo.Titulo.Trim().ToLower();
+                string codigoNorm = articulo.Codigo?.Trim().ToLower();
+
+                // Validación de no duplicidad de artículos (por código o por título)
+                var existentes = _articuloDatos.ListarArticulos();
+                bool repetido = existentes.Any(a => a.Activo && (
+                    (!string.IsNullOrEmpty(codigoNorm) && !string.IsNullOrEmpty(a.Codigo) && a.Codigo.Trim().ToLower() == codigoNorm) ||
+                    (!string.IsNullOrEmpty(a.Titulo) && a.Titulo.Trim().ToLower() == tituloNorm)
+                ));
+
+                if (repetido)
+                {
+                    mensajeError = $"Ya existe un artículo registrado con el título '{articulo.Titulo.Trim()}' o con el mismo código.";
+                    return false;
+                }
+
                 articulo.Titulo = articulo.Titulo.Trim();
                 articulo.Codigo = articulo.Codigo?.Trim() ?? string.Empty;
                 articulo.Tipo = articulo.Tipo?.Trim() ?? "General";
@@ -164,15 +180,24 @@ namespace BlockBuster.Logica
             }
             catch (Exception ex)
             {
-                mensajeError = "Error al guardar el artículo: " + ex.Message;
+                mensajeError = "Error al agregar el artículo: " + ex.Message;
                 return false;
             }
         }
 
         /// <summary>
-        /// Valida reglas de negocio y permisos en la lógica, y actualiza un artículo existente.
+        /// Valida reglas de negocio y permisos en la lógica, y guarda un nuevo artículo.
+        /// Alias de Agregar para compatibilidad.
         /// </summary>
-        public bool Actualizar(Articulo articulo, out string mensajeError)
+        public bool Guardar(Articulo articulo, out string mensajeError)
+        {
+            return Agregar(articulo, out mensajeError);
+        }
+
+        /// <summary>
+        /// Valida reglas de negocio y permisos en la lógica, y edita un artículo existente.
+        /// </summary>
+        public bool Editar(Articulo articulo, out string mensajeError)
         {
             mensajeError = string.Empty;
 
@@ -209,6 +234,22 @@ namespace BlockBuster.Logica
 
             try
             {
+                string tituloNorm = articulo.Titulo.Trim().ToLower();
+                string codigoNorm = articulo.Codigo?.Trim().ToLower();
+
+                // Validación de no duplicidad de artículos (excluyendo el mismo artículo)
+                var existentes = _articuloDatos.ListarArticulos();
+                bool repetido = existentes.Any(a => a.Activo && a.IdArticulo != articulo.IdArticulo && (
+                    (!string.IsNullOrEmpty(codigoNorm) && !string.IsNullOrEmpty(a.Codigo) && a.Codigo.Trim().ToLower() == codigoNorm) ||
+                    (!string.IsNullOrEmpty(a.Titulo) && a.Titulo.Trim().ToLower() == tituloNorm)
+                ));
+
+                if (repetido)
+                {
+                    mensajeError = $"Ya existe otro artículo registrado con el título '{articulo.Titulo.Trim()}' o con el mismo código.";
+                    return false;
+                }
+
                 articulo.Titulo = articulo.Titulo.Trim();
                 articulo.Codigo = articulo.Codigo?.Trim() ?? string.Empty;
                 articulo.Tipo = articulo.Tipo?.Trim() ?? "General";
@@ -222,6 +263,15 @@ namespace BlockBuster.Logica
                 mensajeError = "Error al actualizar el artículo: " + ex.Message;
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Valida reglas de negocio y permisos en la lógica, y actualiza un artículo existente.
+        /// Alias de Editar para compatibilidad.
+        /// </summary>
+        public bool Actualizar(Articulo articulo, out string mensajeError)
+        {
+            return Editar(articulo, out mensajeError);
         }
 
         /// <summary>

@@ -59,7 +59,11 @@ namespace BlockBuster.Interfaz
             btnCompra.Enabled = true;
 
             // Mostrar u ocultar opciones según PermisosService
+            // Inventario y Gestión de Usuarios son exclusivos para Administrador
             btnInventario.Visible = PermisosService.PuedeEditarInventario();
+            btnUsuarios.Visible = PermisosService.PuedeGestionarUsuarios();
+
+            // Registro de Clientes disponible para Administrador y Caja
             btnClientes.Visible = PermisosService.EsAdministrador() || PermisosService.EsCajero();
         }
 
@@ -107,6 +111,35 @@ namespace BlockBuster.Interfaz
             inventario.Show();
             inventario.BringToFront();
             inventario.Activate();
+        }
+
+        private void btnUsuarios_Click(object sender, EventArgs e)
+        {
+            // Validación de permisos en la capa lógica: Solo Admin puede gestionar usuarios
+            if (!PermisosService.PuedeGestionarUsuarios())
+            {
+                MessageBox.Show(
+                    $"Su rol actual '{SesionActual.Rol}' no cuenta con permisos para gestionar usuarios del sistema.",
+                    "Acceso Denegado",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Cerrar cualquier otra ventana hija para mantener una sola activa (Singleton)
+            foreach (Form hijo in this.MdiChildren)
+            {
+                if (hijo != fmrRegistroUsuario.Instancia)
+                {
+                    hijo.Close();
+                }
+            }
+
+            fmrRegistroUsuario usuarios = fmrRegistroUsuario.ObtenerInstancia();
+            usuarios.MdiParent = this;
+            usuarios.Show();
+            usuarios.BringToFront();
+            usuarios.Activate();
         }
 
         private void btnClientes_Click(object sender, EventArgs e)

@@ -157,22 +157,55 @@ namespace BlockBuster.Interfaz
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
-            // "Conectar el botón de agregar con el formulario, sin guardar todavía"
+            if (!PermisosService.PuedeEditarInventario())
+            {
+                MessageBox.Show(
+                    $"Su rol actual '{SesionActual.Rol}' no tiene permisos para agregar artículos.",
+                    "Acceso Denegado",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
             using (var form = new frmArticuloForm())
             {
                 if (form.ShowDialog() == DialogResult.OK)
                 {
-                    MessageBox.Show(
-                        "Formulario completado correctamente.\n(Modo de diseño: conectado con formulario de artículo sin guardar todavía en base de datos)",
-                        "Nuevo Artículo",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
+                    string error;
+                    if (_articuloService.Agregar(form.ArticuloActual, out error))
+                    {
+                        MessageBox.Show(
+                            $"Artículo '{form.ArticuloActual.Titulo}' agregado exitosamente al inventario.",
+                            "Registro Exitoso",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
+
+                        CargarArticulos();
+                    }
+                    else
+                    {
+                        MessageBox.Show(
+                            error,
+                            "Error al Agregar Artículo",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                    }
                 }
             }
         }
 
         private void btnEditar_Click(object sender, EventArgs e)
         {
+            if (!PermisosService.PuedeEditarInventario())
+            {
+                MessageBox.Show(
+                    $"Su rol actual '{SesionActual.Rol}' no tiene permisos para editar artículos.",
+                    "Acceso Denegado",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
             if (dgvArticulos.SelectedRows.Count == 0)
             {
                 MessageBox.Show(
@@ -191,14 +224,22 @@ namespace BlockBuster.Interfaz
                     if (form.ShowDialog() == DialogResult.OK)
                     {
                         string error;
-                        if (_articuloService.Actualizar(form.ArticuloActual, out error))
+                        if (_articuloService.Editar(form.ArticuloActual, out error))
                         {
-                            MessageBox.Show("Artículo actualizado con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show(
+                                $"Artículo '{form.ArticuloActual.Titulo}' actualizado con éxito.",
+                                "Actualización Exitosa",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
                             CargarArticulos();
                         }
                         else
                         {
-                            MessageBox.Show(error, "Error al Actualizar", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(
+                                error,
+                                "Error al Actualizar",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
                         }
                     }
                 }
@@ -207,6 +248,16 @@ namespace BlockBuster.Interfaz
 
         private void btnEliminar_Click(object sender, EventArgs e)
         {
+            if (!PermisosService.PuedeEditarInventario())
+            {
+                MessageBox.Show(
+                    $"Su rol actual '{SesionActual.Rol}' no tiene permisos para eliminar artículos.",
+                    "Acceso Denegado",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
             if (dgvArticulos.SelectedRows.Count == 0)
             {
                 MessageBox.Show(
