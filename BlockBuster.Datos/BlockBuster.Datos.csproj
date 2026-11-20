@@ -56,7 +56,12 @@
     <Compile Include="InicializadorBD.cs" />
     <Compile Include="Entidades\Articulo.cs" />
     <Compile Include="Entidades\Cliente.cs" />
+    <Compile Include="Entidades\Configuracion.cs" />
+    <Compile Include="Entidades\DetalleTransaccion.cs" />
     <Compile Include="Entidades\Pelicula.cs" />
+    <Compile Include="Entidades\Renta.cs" />
+    <Compile Include="Entidades\Ticket.cs" />
+    <Compile Include="Entidades\Transaccion.cs" />
     <Compile Include="Entidades\Usuario.cs" />
     <Compile Include="PeliculaDatos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

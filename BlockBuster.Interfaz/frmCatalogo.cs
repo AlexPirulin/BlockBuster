@@ -57,7 +57,77 @@ namespace BlockBuster.Interfaz
         private void frmCatalogo_Load(object sender, EventArgs e)
         {
             ActualizarHeaderYCategoria();
+            ConfigurarBotonAccionOperacion();
             CargarTarjetas();
+        }
+
+        private void ConfigurarBotonAccionOperacion()
+        {
+            if (btnIrAOperacion == null)
+            {
+                btnIrAOperacion = new Button
+                {
+                    Size = new Size(160, 36),
+                    Location = new Point(pnlFiltros.Width - 180, 16),
+                    Anchor = AnchorStyles.Top | AnchorStyles.Right,
+                    FlatStyle = FlatStyle.Flat,
+                    Cursor = Cursors.Hand,
+                    Font = new Font("Arial Rounded MT Bold", 9.5f, FontStyle.Bold),
+                    ForeColor = Color.White
+                };
+                btnIrAOperacion.FlatAppearance.BorderSize = 2;
+                btnIrAOperacion.Click += (s, ev) => AbrirFormularioOperacion(cboCategoria.SelectedItem?.ToString());
+                pnlFiltros.Controls.Add(btnIrAOperacion);
+            }
+
+            if (Operacion.Equals("Renta", StringComparison.OrdinalIgnoreCase))
+            {
+                btnIrAOperacion.Text = "🔄 Ir a Rentar";
+                btnIrAOperacion.BackColor = Color.DodgerBlue;
+            }
+            else if (Operacion.Equals("Compra", StringComparison.OrdinalIgnoreCase))
+            {
+                btnIrAOperacion.Text = "📦 Ir a Comprar";
+                btnIrAOperacion.BackColor = Color.DarkOrange;
+            }
+            else
+            {
+                btnIrAOperacion.Text = "🛒 Ir a Ventas";
+                btnIrAOperacion.BackColor = Color.SeaGreen;
+            }
+        }
+
+        private Button btnIrAOperacion;
+
+        public void AbrirFormularioOperacion(string categoria = null)
+        {
+            Form parentMdi = this.MdiParent;
+            string cat = !string.IsNullOrWhiteSpace(categoria) && !categoria.Equals("Todas", StringComparison.OrdinalIgnoreCase)
+                ? categoria
+                : (cboCategoria.SelectedItem?.ToString() ?? "Películas");
+
+            Form formOp;
+            if (Operacion.Equals("Renta", StringComparison.OrdinalIgnoreCase))
+                formOp = frmRentas.ObtenerInstancia("Renta", cat);
+            else if (Operacion.Equals("Compra", StringComparison.OrdinalIgnoreCase))
+                formOp = frmCompras.ObtenerInstancia("Compra", cat);
+            else
+                formOp = frmVentas.ObtenerInstancia("Venta", cat);
+
+            if (parentMdi != null)
+            {
+                foreach (Form hijo in parentMdi.MdiChildren)
+                {
+                    if (hijo != formOp && hijo != this)
+                        hijo.Close();
+                }
+                formOp.MdiParent = parentMdi;
+            }
+
+            this.Close();
+            formOp.Show();
+            formOp.BringToFront();
+            formOp.Activate();
         }
 
         public void ActualizarHeaderYCategoria()
@@ -239,6 +309,17 @@ namespace BlockBuster.Interfaz
                 lblDisponibilidad.BackColor = Color.FromArgb(75, 20, 20);
             }
             card.Controls.Add(lblDisponibilidad);
+
+            card.Cursor = Cursors.Hand;
+            pic.Cursor = Cursors.Hand;
+            lblNombre.Cursor = Cursors.Hand;
+            lblDisponibilidad.Cursor = Cursors.Hand;
+
+            Action clicAccion = () => AbrirFormularioOperacion(articulo.Tipo);
+            card.Click += (s, ev) => clicAccion();
+            pic.Click += (s, ev) => clicAccion();
+            lblNombre.Click += (s, ev) => clicAccion();
+            lblDisponibilidad.Click += (s, ev) => clicAccion();
 
             return card;
         }

@@ -47,6 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.32" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\BlockBuster.Datos\BlockBuster.Datos.csproj">
       <Project>{3828AAC8-3FF8-4CBB-9E64-FF5ED97BF0F3}</Project>
       <Name>BlockBuster.Datos</Name>
@@ -86,6 +89,18 @@
     </Compile>
     <Compile Include="frmCompras.Designer.cs">
       <DependentUpon>frmCompras.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmComprasPendientes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmComprasPendientes.Designer.cs">
+      <DependentUpon>frmComprasPendientes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmTicketViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmTicketViewer.Designer.cs">
+      <DependentUpon>frmTicketViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="frmInventario.cs">
       <SubType>Form</SubType>

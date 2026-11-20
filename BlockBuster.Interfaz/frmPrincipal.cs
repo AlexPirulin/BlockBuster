@@ -57,6 +57,10 @@ namespace BlockBuster.Interfaz
             btnRenta.Enabled = true;
             btnVenta.Enabled = true;
             btnCompra.Enabled = true;
+            btnCatalogo.Visible = true;
+
+            // Compras pendientes exclusivo para Administrador y Caja
+            btnComprasPendientes.Visible = PermisosService.EsAdministrador() || PermisosService.EsCajero();
 
             // Mostrar u ocultar opciones según PermisosService
             // Inventario y Gestión de Usuarios son exclusivos para Administrador
@@ -71,17 +75,37 @@ namespace BlockBuster.Interfaz
 
         private void btnRenta_Click(object sender, EventArgs e)
         {
-            EjecutarOperacion("Renta");
+            AbrirVentanaMdi(frmRentas.ObtenerInstancia());
         }
 
         private void btnVenta_Click(object sender, EventArgs e)
         {
-            EjecutarOperacion("Venta");
+            AbrirVentanaMdi(frmVentas.ObtenerInstancia());
         }
 
         private void btnCompra_Click(object sender, EventArgs e)
         {
-            EjecutarOperacion("Compra");
+            AbrirVentanaMdi(frmCompras.ObtenerInstancia());
+        }
+
+        private void btnComprasPendientes_Click(object sender, EventArgs e)
+        {
+            if (!PermisosService.EsAdministrador() && !PermisosService.EsCajero())
+            {
+                MessageBox.Show(
+                    $"Su rol actual '{SesionActual.Rol}' no cuenta con permisos para revisar compras pendientes.",
+                    "Acceso Denegado",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            AbrirVentanaMdi(frmComprasPendientes.ObtenerInstancia());
+        }
+
+        private void btnCatalogo_Click(object sender, EventArgs e)
+        {
+            AbrirVentanaMdi(frmSeleccionCategoria.ObtenerInstancia("Catálogo"));
         }
 
         private void btnInventario_Click(object sender, EventArgs e)

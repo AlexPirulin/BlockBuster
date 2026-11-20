@@ -131,6 +131,21 @@ namespace BlockBuster.Datos
 
                         db.SaveChanges();
                     }
+
+                    // 4. Sembrar Parámetros de Configuración si no existen
+                    if (!db.Configuraciones.Any())
+                    {
+                        db.Configuraciones.AddRange(
+                            new Configuracion { Clave = "TarifaRecargoPorDia", Valor = "15.00", Descripcion = "Tarifa diaria de recargo por mora en devolución de rentas" },
+                            new Configuracion { Clave = "PorcentajeValuacionExcelente", Valor = "0.70", Descripcion = "Porcentaje de valuación para artículos en estado Excelente (70%)" },
+                            new Configuracion { Clave = "PorcentajeValuacionBueno", Valor = "0.50", Descripcion = "Porcentaje de valuación para artículos en estado Bueno (50%)" },
+                            new Configuracion { Clave = "PorcentajeValuacionRegular", Valor = "0.30", Descripcion = "Porcentaje de valuación para artículos en estado Regular (30%)" },
+                            new Configuracion { Clave = "PorcentajeValuacionMalo", Valor = "0.15", Descripcion = "Porcentaje de valuación para artículos en estado Malo (15%)" },
+                            new Configuracion { Clave = "DiasMinimosRenta", Valor = "1", Descripcion = "Mínimo de días permitidos para una renta" },
+                            new Configuracion { Clave = "DiasMaximosRenta", Valor = "14", Descripcion = "Máximo de días permitidos para una renta" }
+                        );
+                        db.SaveChanges();
+                    }
                 }
 
                 return true;

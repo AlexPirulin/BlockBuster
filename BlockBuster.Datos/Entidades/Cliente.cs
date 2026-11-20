@@ -31,6 +31,9 @@ namespace BlockBuster.Datos.Entidades
 
         public DateTime FechaRegistro { get; set; } = DateTime.Now;
 
+        [NotMapped]
+        public string NombreCompleto => $"{Nombre} {Apellido}".Trim();
+
         public Cliente()
         {
         }
