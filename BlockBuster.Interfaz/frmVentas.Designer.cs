@@ -139,11 +139,11 @@ namespace BlockBuster.Interfaz
             this.btnRecargarClientes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRecargarClientes.Font = new System.Drawing.Font("Arial Rounded MT Bold", 9F);
             this.btnRecargarClientes.ForeColor = System.Drawing.Color.White;
-            this.btnRecargarClientes.Location = new System.Drawing.Point(650, 26);
+            this.btnRecargarClientes.Location = new System.Drawing.Point(625, 26);
             this.btnRecargarClientes.Name = "btnRecargarClientes";
-            this.btnRecargarClientes.Size = new System.Drawing.Size(85, 32);
+            this.btnRecargarClientes.Size = new System.Drawing.Size(110, 32);
             this.btnRecargarClientes.TabIndex = 2;
-            this.btnRecargarClientes.Text = "🔄";
+            this.btnRecargarClientes.Text = "🔄 Recargar";
             this.btnRecargarClientes.UseVisualStyleBackColor = false;
             this.btnRecargarClientes.Click += new System.EventHandler(this.btnRecargarClientes_Click);
             // 
@@ -154,7 +154,7 @@ namespace BlockBuster.Interfaz
             this.cboClientes.FormattingEnabled = true;
             this.cboClientes.Location = new System.Drawing.Point(120, 28);
             this.cboClientes.Name = "cboClientes";
-            this.cboClientes.Size = new System.Drawing.Size(515, 27);
+            this.cboClientes.Size = new System.Drawing.Size(490, 27);
             this.cboClientes.TabIndex = 1;
             // 
             // lblCliente

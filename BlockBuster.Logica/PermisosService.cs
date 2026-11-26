@@ -62,21 +62,21 @@ namespace BlockBuster.Logica
         }
 
         /// <summary>
-        /// Determina si el rol tiene permiso para realizar ventas de artículos.
-        /// Permitido para: Administrador y Caja.
+        /// Determina si el rol tiene permiso para realizar ventas / compras en tienda.
+        /// Permitido para: Administrador, Caja y Cliente.
         /// </summary>
         public static bool PuedeRealizarVentas(string rol = null)
         {
-            return EsAdministrador(rol) || EsCajero(rol);
+            return EsAdministrador(rol) || EsCajero(rol) || EsCliente(rol);
         }
 
         /// <summary>
         /// Determina si el rol tiene permiso para realizar o registrar rentas de películas/artículos.
-        /// Permitido para: Administrador y Caja.
+        /// Permitido para: Administrador, Caja y Cliente.
         /// </summary>
         public static bool PuedeRealizarRentas(string rol = null)
         {
-            return EsAdministrador(rol) || EsCajero(rol);
+            return EsAdministrador(rol) || EsCajero(rol) || EsCliente(rol);
         }
 
         /// <summary>
