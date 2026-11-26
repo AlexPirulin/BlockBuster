@@ -230,6 +230,26 @@ namespace BlockBuster.Interfaz
             int dias = (int)numDias.Value;
             string metodoPago = cboMetodoPago.Text;
 
+            if (dias < 1)
+            {
+                MessageBox.Show("Los días de renta deben ser al menos 1.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                numDias.Focus();
+                return;
+            }
+
+            if (articulo.Stock < 1)
+            {
+                MessageBox.Show("El artículo seleccionado no cuenta con existencias suficientes.", "Stock Insuficiente", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(metodoPago))
+            {
+                MessageBox.Show("Debe seleccionar un método de pago.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cboMetodoPago.Focus();
+                return;
+            }
+
             var lista = new List<ItemCarritoDto>
             {
                 new ItemCarritoDto

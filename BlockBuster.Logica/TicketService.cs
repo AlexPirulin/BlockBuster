@@ -185,6 +185,238 @@ namespace BlockBuster.Logica
                 return db.Tickets.FirstOrDefault(t => t.IdTransaccion == idTransaccion);
             }
         }
+
+        /// <summary>
+        /// Obtiene un ticket por su ID, verificando permisos de acceso en la lógica.
+        /// </summary>
+        public Ticket ObtenerPorId(int idTicket, out string mensajeError)
+        {
+            mensajeError = string.Empty;
+            try
+            {
+                using (var db = new BlockBusterDbContext())
+                {
+                    var ticket = db.Tickets.FirstOrDefault(t => t.IdTicket == idTicket);
+                    if (ticket == null)
+                    {
+                        mensajeError = "El ticket solicitado no existe en la base de datos.";
+                        return null;
+                    }
+
+                    ticket.Transaccion = db.Transacciones.FirstOrDefault(tr => tr.IdTransaccion == ticket.IdTransaccion);
+                    if (ticket.Transaccion != null)
+                    {
+                        ticket.Transaccion.Cliente = db.Clientes.Find(ticket.Transaccion.IdCliente);
+                        ticket.Transaccion.Usuario = db.Usuarios.Find(ticket.Transaccion.IdUsuario);
+                    }
+
+                    if (SesionActual.EstaAutenticado && !PermisosService.PuedeVerHistorialCompletoTickets())
+                    {
+                        if (ticket.Transaccion == null || ticket.Transaccion.IdUsuario != SesionActual.IdUsuario)
+                        {
+                            mensajeError = "Acceso denegado: como Cliente solo puede consultar sus propios tickets.";
+                            return null;
+                        }
+                    }
+
+                    return ticket;
+                }
+            }
+            catch (Exception ex)
+            {
+                mensajeError = "Error al consultar el ticket en la base de datos: " + ex.Message;
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Busca tickets filtrando por folio, fecha y/o nombre de cliente.
+        /// Respeta permisos en la lógica: Admin y Caja ven el historial completo; Cliente solo ve los suyos.
+        /// </summary>
+        public List<Ticket> Buscar(string folio = null, DateTime? fecha = null, string cliente = null)
+        {
+            try
+            {
+                using (var db = new BlockBusterDbContext())
+                {
+                    var tickets = db.Tickets
+                        .OrderByDescending(t => t.FechaEmision)
+                        .ToList();
+
+                    var transacciones = db.Transacciones.ToDictionary(tr => tr.IdTransaccion);
+                    var clientes = db.Clientes.ToDictionary(c => c.IdCliente);
+                    var usuarios = db.Usuarios.ToDictionary(u => u.IdUsuario);
+
+                    foreach (var t in tickets)
+                    {
+                        if (transacciones.TryGetValue(t.IdTransaccion, out var trx))
+                        {
+                            if (clientes.TryGetValue(trx.IdCliente, out var cli)) trx.Cliente = cli;
+                            if (usuarios.TryGetValue(trx.IdUsuario, out var usr)) trx.Usuario = usr;
+                            t.Transaccion = trx;
+                        }
+                    }
+
+                    IEnumerable<Ticket> consulta = tickets;
+
+                    // Validación de permisos en la lógica: Cliente solo ve los propios
+                    if (SesionActual.EstaAutenticado && !PermisosService.PuedeVerHistorialCompletoTickets())
+                    {
+                        int idUsr = SesionActual.IdUsuario;
+                        consulta = consulta.Where(t => t.Transaccion != null && t.Transaccion.IdUsuario == idUsr);
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(folio))
+                    {
+                        string f = folio.Trim().ToLowerInvariant();
+                        consulta = consulta.Where(t =>
+                            (!string.IsNullOrEmpty(t.Folio) && t.Folio.ToLowerInvariant().Contains(f)) ||
+                            (t.Transaccion != null && !string.IsNullOrEmpty(t.Transaccion.Folio) && t.Transaccion.Folio.ToLowerInvariant().Contains(f)));
+                    }
+
+                    if (fecha.HasValue)
+                    {
+                        DateTime dia = fecha.Value.Date;
+                        consulta = consulta.Where(t => t.FechaEmision.Date == dia);
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(cliente))
+                    {
+                        string c = cliente.Trim().ToLowerInvariant();
+                        consulta = consulta.Where(t =>
+                            t.Transaccion?.Cliente != null &&
+                            ($"{t.Transaccion.Cliente.Nombre} {t.Transaccion.Cliente.Apellido}").ToLowerInvariant().Contains(c));
+                    }
+
+                    return consulta.ToList();
+                }
+            }
+            catch
+            {
+                return new List<Ticket>();
+            }
+        }
+
+        /// <summary>
+        /// Obtiene todos los tickets emitidos para un usuario específico.
+        /// </summary>
+        public List<Ticket> ObtenerPorUsuario(int idUsuario)
+        {
+            if (idUsuario <= 0) return new List<Ticket>();
+
+            try
+            {
+                using (var db = new BlockBusterDbContext())
+                {
+                    var idsTrx = db.Transacciones
+                        .Where(tr => tr.IdUsuario == idUsuario)
+                        .Select(tr => tr.IdTransaccion)
+                        .ToList();
+
+                    var tickets = db.Tickets
+                        .Where(t => idsTrx.Contains(t.IdTransaccion))
+                        .OrderByDescending(t => t.FechaEmision)
+                        .ToList();
+
+                    var transacciones = db.Transacciones.Where(tr => idsTrx.Contains(tr.IdTransaccion)).ToDictionary(tr => tr.IdTransaccion);
+                    var clientes = db.Clientes.ToDictionary(c => c.IdCliente);
+                    var usuarios = db.Usuarios.ToDictionary(u => u.IdUsuario);
+
+                    foreach (var t in tickets)
+                    {
+                        if (transacciones.TryGetValue(t.IdTransaccion, out var trx))
+                        {
+                            if (clientes.TryGetValue(trx.IdCliente, out var cli)) trx.Cliente = cli;
+                            if (usuarios.TryGetValue(trx.IdUsuario, out var usr)) trx.Usuario = usr;
+                            t.Transaccion = trx;
+                        }
+                    }
+
+                    return tickets;
+                }
+            }
+            catch
+            {
+                return new List<Ticket>();
+            }
+        }
+
+        /// <summary>
+        /// Prepara el archivo físico de un ticket para reabrirlo o reimprimirlo.
+        /// Si falta la carpeta 'Tickets' o el archivo en disco, lo reconstruye desde ContenidoTexto en la BD.
+        /// Detecta si el archivo está abierto o bloqueado por otro proceso.
+        /// </summary>
+        public bool PrepararArchivoTicket(Ticket ticket, out string rutaFisica, out string mensajeError)
+        {
+            rutaFisica = string.Empty;
+            mensajeError = string.Empty;
+
+            if (ticket == null)
+            {
+                mensajeError = "No se proporcionó un ticket válido.";
+                return false;
+            }
+
+            try
+            {
+                // Garantizar que la carpeta Tickets exista
+                string dirTickets = DirectorioTickets;
+                if (!Directory.Exists(dirTickets))
+                {
+                    Directory.CreateDirectory(dirTickets);
+                }
+
+                string rutaGuardada = ticket.RutaArchivo;
+                if (string.IsNullOrWhiteSpace(rutaGuardada) || rutaGuardada.StartsWith("Error", StringComparison.OrdinalIgnoreCase))
+                {
+                    rutaGuardada = Path.Combine(CarpetaTickets, $"Ticket_{ticket.Folio}_{ticket.FechaEmision:yyyyMMdd_HHmmss}.txt");
+                }
+
+                rutaFisica = Path.IsPathRooted(rutaGuardada)
+                    ? rutaGuardada
+                    : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, rutaGuardada);
+
+                string carpetaPadre = Path.GetDirectoryName(rutaFisica);
+                if (!string.IsNullOrWhiteSpace(carpetaPadre) && !Directory.Exists(carpetaPadre))
+                {
+                    Directory.CreateDirectory(carpetaPadre);
+                }
+
+                if (!File.Exists(rutaFisica))
+                {
+                    string contenido = string.IsNullOrWhiteSpace(ticket.ContenidoTexto)
+                        ? $"FOLIO: {ticket.Folio}\r\nFECHA: {ticket.FechaEmision:dd/MM/yyyy HH:mm:ss}\r\n"
+                        : ticket.ContenidoTexto;
+
+                    File.WriteAllText(rutaFisica, contenido, Encoding.UTF8);
+                }
+                else
+                {
+                    // Verificar que el archivo no esté bloqueado / abierto de forma exclusiva
+                    using (FileStream fs = File.Open(rutaFisica, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    {
+                        // Lectura verificada
+                    }
+                }
+
+                return true;
+            }
+            catch (IOException ex)
+            {
+                mensajeError = $"El archivo del ticket '{ticket.Folio}' se encuentra abierto o bloqueado por otro programa.\nDetalle: {ex.Message}";
+                return false;
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                mensajeError = $"No tiene permisos suficientes para acceder o crear el archivo del ticket.\nDetalle: {ex.Message}";
+                return false;
+            }
+            catch (Exception ex)
+            {
+                mensajeError = $"Error inesperado al preparar el ticket: {ex.Message}";
+                return false;
+            }
+        }
     }
 }
 

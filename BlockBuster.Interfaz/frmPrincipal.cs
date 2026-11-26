@@ -54,18 +54,21 @@ namespace BlockBuster.Interfaz
         /// </summary>
         public void AplicarPermisos()
         {
-            btnRenta.Enabled = true;
-            btnVenta.Enabled = true;
-            btnCompra.Enabled = true;
+            btnRenta.Enabled = PermisosService.PuedeRealizarRentas();
+            btnVenta.Enabled = PermisosService.PuedeRealizarVentas();
+            btnCompra.Enabled = SesionActual.EstaAutenticado;
             btnCatalogo.Visible = true;
+            btnTickets.Visible = SesionActual.EstaAutenticado;
 
-            // Compras pendientes exclusivo para Administrador y Caja
+            // Devoluciones y compras pendientes exclusivos para Administrador y Caja
+            btnRentasActivas.Visible = PermisosService.PuedeRegistrarDevolucion();
             btnComprasPendientes.Visible = PermisosService.EsAdministrador() || PermisosService.EsCajero();
 
-            // Mostrar u ocultar opciones según PermisosService
-            // Inventario y Gestión de Usuarios son exclusivos para Administrador
+            // Inventario, Usuarios, Reportes y Configuración exclusivos para Administrador
             btnInventario.Visible = PermisosService.PuedeEditarInventario();
             btnUsuarios.Visible = PermisosService.PuedeGestionarUsuarios();
+            btnReportes.Visible = PermisosService.PuedeVerReportes();
+            btnConfiguracion.Visible = PermisosService.PuedeConfigurarSistema();
 
             // Registro de Clientes disponible para Administrador y Caja
             btnClientes.Visible = PermisosService.EsAdministrador() || PermisosService.EsCajero();
@@ -106,6 +109,56 @@ namespace BlockBuster.Interfaz
         private void btnCatalogo_Click(object sender, EventArgs e)
         {
             AbrirVentanaMdi(frmSeleccionCategoria.ObtenerInstancia("Catálogo"));
+        }
+
+        private void btnRentasActivas_Click(object sender, EventArgs e)
+        {
+            if (!PermisosService.PuedeRegistrarDevolucion())
+            {
+                MessageBox.Show(
+                    $"Su rol actual '{SesionActual.Rol}' no cuenta con permisos para registrar devoluciones.",
+                    "Acceso Denegado",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            AbrirVentanaMdi(frmRentasActivas.ObtenerInstancia());
+        }
+
+        private void btnTickets_Click(object sender, EventArgs e)
+        {
+            AbrirVentanaMdi(frmHistorialTickets.ObtenerInstancia());
+        }
+
+        private void btnReportes_Click(object sender, EventArgs e)
+        {
+            if (!PermisosService.PuedeVerReportes())
+            {
+                MessageBox.Show(
+                    $"Su rol actual '{SesionActual.Rol}' no cuenta con permisos para consultar reportes administrativos.",
+                    "Acceso Denegado",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            AbrirVentanaMdi(frmReportes.ObtenerInstancia());
+        }
+
+        private void btnConfiguracion_Click(object sender, EventArgs e)
+        {
+            if (!PermisosService.PuedeConfigurarSistema())
+            {
+                MessageBox.Show(
+                    $"Su rol actual '{SesionActual.Rol}' no cuenta con permisos para modificar la configuración.",
+                    "Acceso Denegado",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            AbrirVentanaMdi(frmConfiguracion.ObtenerInstancia());
         }
 
         private void btnInventario_Click(object sender, EventArgs e)

@@ -34,6 +34,10 @@ namespace BlockBuster.Interfaz
             this.lblUsuarioActual = new System.Windows.Forms.Label();
             this.lblLogo = new System.Windows.Forms.Label();
             this.pnlToolbar = new System.Windows.Forms.Panel();
+            this.btnConfiguracion = new System.Windows.Forms.Button();
+            this.btnReportes = new System.Windows.Forms.Button();
+            this.btnTickets = new System.Windows.Forms.Button();
+            this.btnRentasActivas = new System.Windows.Forms.Button();
             this.btnClientes = new System.Windows.Forms.Button();
             this.btnUsuarios = new System.Windows.Forms.Button();
             this.btnInventario = new System.Windows.Forms.Button();
@@ -118,6 +122,10 @@ namespace BlockBuster.Interfaz
             // pnlToolbar
             // 
             this.pnlToolbar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(50)))), ((int)(((byte)(80)))));
+            this.pnlToolbar.Controls.Add(this.btnConfiguracion);
+            this.pnlToolbar.Controls.Add(this.btnReportes);
+            this.pnlToolbar.Controls.Add(this.btnTickets);
+            this.pnlToolbar.Controls.Add(this.btnRentasActivas);
             this.pnlToolbar.Controls.Add(this.btnClientes);
             this.pnlToolbar.Controls.Add(this.btnUsuarios);
             this.pnlToolbar.Controls.Add(this.btnInventario);
@@ -130,8 +138,76 @@ namespace BlockBuster.Interfaz
             this.pnlToolbar.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlToolbar.Location = new System.Drawing.Point(0, 75);
             this.pnlToolbar.Name = "pnlToolbar";
-            this.pnlToolbar.Size = new System.Drawing.Size(1260, 70);
+            this.pnlToolbar.Size = new System.Drawing.Size(1260, 116);
             this.pnlToolbar.TabIndex = 2;
+            // 
+            // btnConfiguracion
+            // 
+            this.btnConfiguracion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(95)))));
+            this.btnConfiguracion.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnConfiguracion.FlatAppearance.BorderColor = System.Drawing.Color.Gold;
+            this.btnConfiguracion.FlatAppearance.BorderSize = 2;
+            this.btnConfiguracion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnConfiguracion.Font = new System.Drawing.Font("Arial Rounded MT Bold", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnConfiguracion.ForeColor = System.Drawing.Color.White;
+            this.btnConfiguracion.Location = new System.Drawing.Point(783, 60);
+            this.btnConfiguracion.Name = "btnConfiguracion";
+            this.btnConfiguracion.Size = new System.Drawing.Size(185, 44);
+            this.btnConfiguracion.TabIndex = 12;
+            this.btnConfiguracion.Text = "🛠️ CONFIGURACIÓN";
+            this.btnConfiguracion.UseVisualStyleBackColor = false;
+            this.btnConfiguracion.Click += new System.EventHandler(this.btnConfiguracion_Click);
+            // 
+            // btnReportes
+            // 
+            this.btnReportes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(100)))), ((int)(((byte)(90)))));
+            this.btnReportes.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnReportes.FlatAppearance.BorderColor = System.Drawing.Color.Gold;
+            this.btnReportes.FlatAppearance.BorderSize = 2;
+            this.btnReportes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnReportes.Font = new System.Drawing.Font("Arial Rounded MT Bold", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnReportes.ForeColor = System.Drawing.Color.White;
+            this.btnReportes.Location = new System.Drawing.Point(621, 60);
+            this.btnReportes.Name = "btnReportes";
+            this.btnReportes.Size = new System.Drawing.Size(155, 44);
+            this.btnReportes.TabIndex = 11;
+            this.btnReportes.Text = "📊 REPORTES";
+            this.btnReportes.UseVisualStyleBackColor = false;
+            this.btnReportes.Click += new System.EventHandler(this.btnReportes_Click);
+            // 
+            // btnTickets
+            // 
+            this.btnTickets.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(95)))), ((int)(((byte)(120)))));
+            this.btnTickets.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnTickets.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.btnTickets.FlatAppearance.BorderSize = 2;
+            this.btnTickets.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTickets.Font = new System.Drawing.Font("Arial Rounded MT Bold", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnTickets.ForeColor = System.Drawing.Color.White;
+            this.btnTickets.Location = new System.Drawing.Point(1057, 8);
+            this.btnTickets.Name = "btnTickets";
+            this.btnTickets.Size = new System.Drawing.Size(165, 44);
+            this.btnTickets.TabIndex = 10;
+            this.btnTickets.Text = "🧾 TICKETS";
+            this.btnTickets.UseVisualStyleBackColor = false;
+            this.btnTickets.Click += new System.EventHandler(this.btnTickets_Click);
+            // 
+            // btnRentasActivas
+            // 
+            this.btnRentasActivas.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(120)))), ((int)(((byte)(165)))));
+            this.btnRentasActivas.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnRentasActivas.FlatAppearance.BorderColor = System.Drawing.Color.Gold;
+            this.btnRentasActivas.FlatAppearance.BorderSize = 2;
+            this.btnRentasActivas.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRentasActivas.Font = new System.Drawing.Font("Arial Rounded MT Bold", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRentasActivas.ForeColor = System.Drawing.Color.White;
+            this.btnRentasActivas.Location = new System.Drawing.Point(561, 8);
+            this.btnRentasActivas.Name = "btnRentasActivas";
+            this.btnRentasActivas.Size = new System.Drawing.Size(175, 44);
+            this.btnRentasActivas.TabIndex = 9;
+            this.btnRentasActivas.Text = "📥 DEVOLUCIONES";
+            this.btnRentasActivas.UseVisualStyleBackColor = false;
+            this.btnRentasActivas.Click += new System.EventHandler(this.btnRentasActivas_Click);
             // 
             // btnClientes
             // 
@@ -140,11 +216,11 @@ namespace BlockBuster.Interfaz
             this.btnClientes.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.btnClientes.FlatAppearance.BorderSize = 2;
             this.btnClientes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnClientes.Font = new System.Drawing.Font("Arial Rounded MT Bold", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnClientes.Font = new System.Drawing.Font("Arial Rounded MT Bold", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnClientes.ForeColor = System.Drawing.Color.White;
-            this.btnClientes.Location = new System.Drawing.Point(1110, 10);
+            this.btnClientes.Location = new System.Drawing.Point(459, 60);
             this.btnClientes.Name = "btnClientes";
-            this.btnClientes.Size = new System.Drawing.Size(135, 48);
+            this.btnClientes.Size = new System.Drawing.Size(155, 44);
             this.btnClientes.TabIndex = 8;
             this.btnClientes.Text = "👥 CLIENTES";
             this.btnClientes.UseVisualStyleBackColor = false;
@@ -157,11 +233,11 @@ namespace BlockBuster.Interfaz
             this.btnUsuarios.FlatAppearance.BorderColor = System.Drawing.Color.Gold;
             this.btnUsuarios.FlatAppearance.BorderSize = 2;
             this.btnUsuarios.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnUsuarios.Font = new System.Drawing.Font("Arial Rounded MT Bold", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnUsuarios.Font = new System.Drawing.Font("Arial Rounded MT Bold", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnUsuarios.ForeColor = System.Drawing.Color.White;
-            this.btnUsuarios.Location = new System.Drawing.Point(970, 10);
+            this.btnUsuarios.Location = new System.Drawing.Point(297, 60);
             this.btnUsuarios.Name = "btnUsuarios";
-            this.btnUsuarios.Size = new System.Drawing.Size(135, 48);
+            this.btnUsuarios.Size = new System.Drawing.Size(155, 44);
             this.btnUsuarios.TabIndex = 7;
             this.btnUsuarios.Text = "👤 USUARIOS";
             this.btnUsuarios.UseVisualStyleBackColor = false;
@@ -174,11 +250,11 @@ namespace BlockBuster.Interfaz
             this.btnInventario.FlatAppearance.BorderColor = System.Drawing.Color.Gold;
             this.btnInventario.FlatAppearance.BorderSize = 2;
             this.btnInventario.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnInventario.Font = new System.Drawing.Font("Arial Rounded MT Bold", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnInventario.Font = new System.Drawing.Font("Arial Rounded MT Bold", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnInventario.ForeColor = System.Drawing.Color.White;
-            this.btnInventario.Location = new System.Drawing.Point(825, 10);
+            this.btnInventario.Location = new System.Drawing.Point(130, 60);
             this.btnInventario.Name = "btnInventario";
-            this.btnInventario.Size = new System.Drawing.Size(140, 48);
+            this.btnInventario.Size = new System.Drawing.Size(160, 44);
             this.btnInventario.TabIndex = 6;
             this.btnInventario.Text = "⚙️ INVENTARIO";
             this.btnInventario.UseVisualStyleBackColor = false;
@@ -191,11 +267,11 @@ namespace BlockBuster.Interfaz
             this.btnCatalogo.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.btnCatalogo.FlatAppearance.BorderSize = 2;
             this.btnCatalogo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCatalogo.Font = new System.Drawing.Font("Arial Rounded MT Bold", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCatalogo.Font = new System.Drawing.Font("Arial Rounded MT Bold", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCatalogo.ForeColor = System.Drawing.Color.White;
-            this.btnCatalogo.Location = new System.Drawing.Point(685, 10);
+            this.btnCatalogo.Location = new System.Drawing.Point(910, 8);
             this.btnCatalogo.Name = "btnCatalogo";
-            this.btnCatalogo.Size = new System.Drawing.Size(135, 48);
+            this.btnCatalogo.Size = new System.Drawing.Size(140, 44);
             this.btnCatalogo.TabIndex = 5;
             this.btnCatalogo.Text = "🔍 CATÁLOGO";
             this.btnCatalogo.UseVisualStyleBackColor = false;
@@ -210,9 +286,9 @@ namespace BlockBuster.Interfaz
             this.btnComprasPendientes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnComprasPendientes.Font = new System.Drawing.Font("Arial Rounded MT Bold", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnComprasPendientes.ForeColor = System.Drawing.Color.White;
-            this.btnComprasPendientes.Location = new System.Drawing.Point(530, 10);
+            this.btnComprasPendientes.Location = new System.Drawing.Point(743, 8);
             this.btnComprasPendientes.Name = "btnComprasPendientes";
-            this.btnComprasPendientes.Size = new System.Drawing.Size(150, 48);
+            this.btnComprasPendientes.Size = new System.Drawing.Size(160, 44);
             this.btnComprasPendientes.TabIndex = 4;
             this.btnComprasPendientes.Text = "📋 PENDIENTES";
             this.btnComprasPendientes.UseVisualStyleBackColor = false;
@@ -225,11 +301,11 @@ namespace BlockBuster.Interfaz
             this.btnCompra.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.btnCompra.FlatAppearance.BorderSize = 2;
             this.btnCompra.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCompra.Font = new System.Drawing.Font("Arial Rounded MT Bold", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCompra.Font = new System.Drawing.Font("Arial Rounded MT Bold", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCompra.ForeColor = System.Drawing.Color.White;
-            this.btnCompra.Location = new System.Drawing.Point(395, 10);
+            this.btnCompra.Location = new System.Drawing.Point(414, 8);
             this.btnCompra.Name = "btnCompra";
-            this.btnCompra.Size = new System.Drawing.Size(130, 48);
+            this.btnCompra.Size = new System.Drawing.Size(140, 44);
             this.btnCompra.TabIndex = 3;
             this.btnCompra.Text = "📦 COMPRA";
             this.btnCompra.UseVisualStyleBackColor = false;
@@ -242,11 +318,11 @@ namespace BlockBuster.Interfaz
             this.btnVenta.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.btnVenta.FlatAppearance.BorderSize = 2;
             this.btnVenta.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnVenta.Font = new System.Drawing.Font("Arial Rounded MT Bold", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnVenta.Font = new System.Drawing.Font("Arial Rounded MT Bold", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnVenta.ForeColor = System.Drawing.Color.White;
-            this.btnVenta.Location = new System.Drawing.Point(265, 10);
+            this.btnVenta.Location = new System.Drawing.Point(272, 8);
             this.btnVenta.Name = "btnVenta";
-            this.btnVenta.Size = new System.Drawing.Size(125, 48);
+            this.btnVenta.Size = new System.Drawing.Size(135, 44);
             this.btnVenta.TabIndex = 2;
             this.btnVenta.Text = "🛒 VENTA";
             this.btnVenta.UseVisualStyleBackColor = false;
@@ -259,11 +335,11 @@ namespace BlockBuster.Interfaz
             this.btnRenta.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.btnRenta.FlatAppearance.BorderSize = 2;
             this.btnRenta.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnRenta.Font = new System.Drawing.Font("Arial Rounded MT Bold", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRenta.Font = new System.Drawing.Font("Arial Rounded MT Bold", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRenta.ForeColor = System.Drawing.Color.White;
-            this.btnRenta.Location = new System.Drawing.Point(135, 10);
+            this.btnRenta.Location = new System.Drawing.Point(130, 8);
             this.btnRenta.Name = "btnRenta";
-            this.btnRenta.Size = new System.Drawing.Size(125, 48);
+            this.btnRenta.Size = new System.Drawing.Size(135, 44);
             this.btnRenta.TabIndex = 1;
             this.btnRenta.Text = "🔄 RENTA";
             this.btnRenta.UseVisualStyleBackColor = false;
@@ -272,11 +348,11 @@ namespace BlockBuster.Interfaz
             // lblAccionesTitulo
             // 
             this.lblAccionesTitulo.AutoSize = true;
-            this.lblAccionesTitulo.Font = new System.Drawing.Font("Arial Rounded MT Bold", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAccionesTitulo.Font = new System.Drawing.Font("Arial Rounded MT Bold", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAccionesTitulo.ForeColor = System.Drawing.Color.LightCyan;
-            this.lblAccionesTitulo.Location = new System.Drawing.Point(10, 24);
+            this.lblAccionesTitulo.Location = new System.Drawing.Point(10, 19);
             this.lblAccionesTitulo.Name = "lblAccionesTitulo";
-            this.lblAccionesTitulo.Size = new System.Drawing.Size(117, 22);
+            this.lblAccionesTitulo.Size = new System.Drawing.Size(112, 20);
             this.lblAccionesTitulo.TabIndex = 0;
             this.lblAccionesTitulo.Text = "Operaciones:";
             // 
@@ -354,6 +430,10 @@ namespace BlockBuster.Interfaz
         private System.Windows.Forms.Button btnCompra;
         private System.Windows.Forms.Button btnComprasPendientes;
         private System.Windows.Forms.Button btnCatalogo;
+        private System.Windows.Forms.Button btnRentasActivas;
+        private System.Windows.Forms.Button btnTickets;
+        private System.Windows.Forms.Button btnReportes;
+        private System.Windows.Forms.Button btnConfiguracion;
         private System.Windows.Forms.Button btnInventario;
         private System.Windows.Forms.Button btnUsuarios;
         private System.Windows.Forms.Button btnClientes;

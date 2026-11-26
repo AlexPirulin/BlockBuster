@@ -186,6 +186,19 @@ namespace BlockBuster.Interfaz
             }
 
             int cantidad = (int)numCantidad.Value;
+            if (cantidad <= 0)
+            {
+                MessageBox.Show("La cantidad debe ser mayor a cero (no se permiten cantidades negativas o nulas).", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                numCantidad.Focus();
+                return;
+            }
+
+            if (cantidad > art.Stock)
+            {
+                MessageBox.Show($"Existencia insuficiente. Solo hay {art.Stock} unidad(es) disponible(s) en inventario.", "Stock Insuficiente", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                numCantidad.Focus();
+                return;
+            }
 
             // Verificar si ya está en carrito para sumar cantidad
             var existente = _carrito.FirstOrDefault(c => c.IdArticulo == art.IdArticulo);

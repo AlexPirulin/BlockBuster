@@ -78,6 +78,42 @@ namespace BlockBuster.Logica
         {
             return EsAdministrador(rol) || EsCajero(rol);
         }
+
+        /// <summary>
+        /// Determina si el rol puede registrar devoluciones de rentas activas/vencidas.
+        /// Permitido para: Administrador y Caja.
+        /// </summary>
+        public static bool PuedeRegistrarDevolucion(string rol = null)
+        {
+            return EsAdministrador(rol) || EsCajero(rol);
+        }
+
+        /// <summary>
+        /// Determina si el rol puede consultar el historial completo de tickets de todos los usuarios.
+        /// Admin y Caja ven todo; Cliente solo ve sus propios tickets.
+        /// </summary>
+        public static bool PuedeVerHistorialCompletoTickets(string rol = null)
+        {
+            return EsAdministrador(rol) || EsCajero(rol);
+        }
+
+        /// <summary>
+        /// Determina si el rol tiene acceso a reportes financieros y de inventario bajo.
+        /// Permitido para: Administrador.
+        /// </summary>
+        public static bool PuedeVerReportes(string rol = null)
+        {
+            return EsAdministrador(rol);
+        }
+
+        /// <summary>
+        /// Determina si el rol tiene permiso para modificar la configuración del sistema.
+        /// Permitido para: Administrador.
+        /// </summary>
+        public static bool PuedeConfigurarSistema(string rol = null)
+        {
+            return EsAdministrador(rol);
+        }
     }
 }
 

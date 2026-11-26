@@ -96,6 +96,30 @@
     <Compile Include="frmComprasPendientes.Designer.cs">
       <DependentUpon>frmComprasPendientes.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmConfiguracion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmConfiguracion.Designer.cs">
+      <DependentUpon>frmConfiguracion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmHistorialTickets.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmHistorialTickets.Designer.cs">
+      <DependentUpon>frmHistorialTickets.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmRentasActivas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmRentasActivas.Designer.cs">
+      <DependentUpon>frmRentasActivas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmReportes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmReportes.Designer.cs">
+      <DependentUpon>frmReportes.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmTicketViewer.cs">
       <SubType>Form</SubType>
     </Compile>

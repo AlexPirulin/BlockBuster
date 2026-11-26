@@ -62,12 +62,14 @@
     <Compile Include="ClienteService.cs" />
     <Compile Include="CompraService.cs" />
     <Compile Include="ConfiguracionService.cs" />
+    <Compile Include="DevolucionService.cs" />
     <Compile Include="ImagenService.cs" />
     <Compile Include="ItemCarritoDto.cs" />
     <Compile Include="PeliculaLogica.cs" />
     <Compile Include="PermisosService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RentaService.cs" />
+    <Compile Include="ReporteService.cs" />
     <Compile Include="SesionActual.cs" />
     <Compile Include="TicketService.cs" />
     <Compile Include="UsuarioLogica.cs" />
