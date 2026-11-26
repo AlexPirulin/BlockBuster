@@ -94,7 +94,7 @@ namespace BlockBuster.Interfaz
             this.chkSoloDisponibles.AutoSize = true;
             this.chkSoloDisponibles.Font = new System.Drawing.Font("Arial Rounded MT Bold", 9.5F);
             this.chkSoloDisponibles.ForeColor = System.Drawing.Color.LightCyan;
-            this.chkSoloDisponibles.Location = new System.Drawing.Point(740, 16);
+            this.chkSoloDisponibles.Location = new System.Drawing.Point(765, 16);
             this.chkSoloDisponibles.Name = "chkSoloDisponibles";
             this.chkSoloDisponibles.Size = new System.Drawing.Size(161, 23);
             this.chkSoloDisponibles.TabIndex = 5;
@@ -112,9 +112,9 @@ namespace BlockBuster.Interfaz
             "Películas",
             "Videojuegos",
             "Consolas"});
-            this.cboFiltroCategoria.Location = new System.Drawing.Point(555, 14);
+            this.cboFiltroCategoria.Location = new System.Drawing.Point(575, 14);
             this.cboFiltroCategoria.Name = "cboFiltroCategoria";
-            this.cboFiltroCategoria.Size = new System.Drawing.Size(160, 26);
+            this.cboFiltroCategoria.Size = new System.Drawing.Size(165, 26);
             this.cboFiltroCategoria.TabIndex = 4;
             this.cboFiltroCategoria.SelectedIndexChanged += new System.EventHandler(this.cboFiltroCategoria_SelectedIndexChanged);
             // 
@@ -123,7 +123,7 @@ namespace BlockBuster.Interfaz
             this.lblFiltroCat.AutoSize = true;
             this.lblFiltroCat.Font = new System.Drawing.Font("Arial Rounded MT Bold", 9.5F);
             this.lblFiltroCat.ForeColor = System.Drawing.Color.White;
-            this.lblFiltroCat.Location = new System.Drawing.Point(460, 18);
+            this.lblFiltroCat.Location = new System.Drawing.Point(475, 18);
             this.lblFiltroCat.Name = "lblFiltroCat";
             this.lblFiltroCat.Size = new System.Drawing.Size(91, 19);
             this.lblFiltroCat.TabIndex = 3;
@@ -136,9 +136,9 @@ namespace BlockBuster.Interfaz
             this.btnBuscar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnBuscar.Font = new System.Drawing.Font("Arial Rounded MT Bold", 9F);
             this.btnBuscar.ForeColor = System.Drawing.Color.White;
-            this.btnBuscar.Location = new System.Drawing.Point(340, 12);
+            this.btnBuscar.Location = new System.Drawing.Point(345, 12);
             this.btnBuscar.Name = "btnBuscar";
-            this.btnBuscar.Size = new System.Drawing.Size(95, 30);
+            this.btnBuscar.Size = new System.Drawing.Size(110, 32);
             this.btnBuscar.TabIndex = 2;
             this.btnBuscar.Text = "🔍 Buscar";
             this.btnBuscar.UseVisualStyleBackColor = false;
@@ -277,6 +277,7 @@ namespace BlockBuster.Interfaz
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.SteelBlue;
             this.ClientSize = new System.Drawing.Size(1000, 580);
+            this.MinimumSize = new System.Drawing.Size(920, 520);
             this.Controls.Add(this.dgvArticulos);
             this.Controls.Add(this.pnlAcciones);
             this.Controls.Add(this.pnlFiltros);

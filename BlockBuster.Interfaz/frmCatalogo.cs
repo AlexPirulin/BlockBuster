@@ -67,9 +67,8 @@ namespace BlockBuster.Interfaz
             {
                 btnIrAOperacion = new Button
                 {
-                    Size = new Size(160, 36),
-                    Location = new Point(pnlFiltros.Width - 180, 16),
-                    Anchor = AnchorStyles.Top | AnchorStyles.Right,
+                    Size = new Size(185, 38),
+                    Location = new Point(535, 16),
                     FlatStyle = FlatStyle.Flat,
                     Cursor = Cursors.Hand,
                     Font = new Font("Arial Rounded MT Bold", 9.5f, FontStyle.Bold),
@@ -77,7 +76,7 @@ namespace BlockBuster.Interfaz
                 };
                 btnIrAOperacion.FlatAppearance.BorderSize = 2;
                 btnIrAOperacion.Click += (s, ev) => AbrirFormularioOperacion(cboCategoria.SelectedItem?.ToString());
-                pnlFiltros.Controls.Add(btnIrAOperacion);
+                pnlHeader.Controls.Add(btnIrAOperacion);
             }
 
             if (Operacion.Equals("Renta", StringComparison.OrdinalIgnoreCase))

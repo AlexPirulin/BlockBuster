@@ -65,11 +65,11 @@ namespace BlockBuster.Interfaz
             // lblInfoUsuario
             // 
             this.lblInfoUsuario.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblInfoUsuario.Font = new System.Drawing.Font("Arial", 9.5F, System.Drawing.FontStyle.Italic);
+            this.lblInfoUsuario.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Italic);
             this.lblInfoUsuario.ForeColor = System.Drawing.Color.LightCyan;
-            this.lblInfoUsuario.Location = new System.Drawing.Point(680, 25);
+            this.lblInfoUsuario.Location = new System.Drawing.Point(730, 25);
             this.lblInfoUsuario.Name = "lblInfoUsuario";
-            this.lblInfoUsuario.Size = new System.Drawing.Size(400, 22);
+            this.lblInfoUsuario.Size = new System.Drawing.Size(350, 22);
             this.lblInfoUsuario.TabIndex = 1;
             this.lblInfoUsuario.Text = "Sesión: -";
             this.lblInfoUsuario.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -77,11 +77,11 @@ namespace BlockBuster.Interfaz
             // lblTituloOperacion
             // 
             this.lblTituloOperacion.AutoSize = true;
-            this.lblTituloOperacion.Font = new System.Drawing.Font("Arial Rounded MT Bold", 17F);
+            this.lblTituloOperacion.Font = new System.Drawing.Font("Arial Rounded MT Bold", 14.5F);
             this.lblTituloOperacion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(0)))));
-            this.lblTituloOperacion.Location = new System.Drawing.Point(220, 18);
+            this.lblTituloOperacion.Location = new System.Drawing.Point(210, 20);
             this.lblTituloOperacion.Name = "lblTituloOperacion";
-            this.lblTituloOperacion.Size = new System.Drawing.Size(410, 33);
+            this.lblTituloOperacion.Size = new System.Drawing.Size(310, 28);
             this.lblTituloOperacion.TabIndex = 0;
             this.lblTituloOperacion.Text = "CATÁLOGO DE PRODUCTOS";
             // 

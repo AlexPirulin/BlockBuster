@@ -44,25 +44,25 @@ namespace BlockBuster.Interfaz
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Arial Rounded MT Bold", 20F);
             this.label1.ForeColor = System.Drawing.Color.FromArgb(255, 204, 0);
-            this.label1.Location = new System.Drawing.Point(108, 18);
+            this.label1.Location = new System.Drawing.Point(0, 14);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(264, 39);
+            this.label1.Size = new System.Drawing.Size(480, 42);
             this.label1.TabIndex = 0;
             this.label1.Text = "🎬 BLOCKBUSTER";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblSubtitulo
             // 
-            this.lblSubtitulo.AutoSize = true;
             this.lblSubtitulo.Font = new System.Drawing.Font("Arial", 10F);
             this.lblSubtitulo.ForeColor = System.Drawing.Color.LightSteelBlue;
-            this.lblSubtitulo.Location = new System.Drawing.Point(132, 60);
+            this.lblSubtitulo.Location = new System.Drawing.Point(0, 58);
             this.lblSubtitulo.Name = "lblSubtitulo";
-            this.lblSubtitulo.Size = new System.Drawing.Size(215, 19);
+            this.lblSubtitulo.Size = new System.Drawing.Size(480, 24);
             this.lblSubtitulo.TabIndex = 1;
             this.lblSubtitulo.Text = "Inicio de Sesión del Sistema";
+            this.lblSubtitulo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // pnlCard
             // 
