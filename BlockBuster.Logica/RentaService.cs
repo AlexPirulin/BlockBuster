@@ -77,7 +77,14 @@ namespace BlockBuster.Logica
             mensajeError = string.Empty;
             ticketGenerado = null;
 
-            // 1. Validaciones previas
+            // 1. Validación de permisos en la capa lógica (Admin o Caja)
+            if (SesionActual.EstaAutenticado && !PermisosService.PuedeRealizarRentas())
+            {
+                mensajeError = $"Acceso denegado: el rol '{SesionActual.Rol}' no tiene permisos para registrar rentas.";
+                return false;
+            }
+
+            // 2. Validaciones de entrada antes de abrir conexión a BD
             if (idCliente <= 0)
             {
                 mensajeError = "Debe seleccionar un cliente registrado para asociar a la renta.";
@@ -117,6 +124,7 @@ namespace BlockBuster.Logica
                         if (cliente == null || !cliente.Activo)
                         {
                             mensajeError = "El cliente seleccionado no existe o está inactivo.";
+                            dbTx.Rollback();
                             return false;
                         }
 
@@ -124,15 +132,23 @@ namespace BlockBuster.Logica
                         if (usuario == null)
                         {
                             mensajeError = "El usuario que atiende no fue encontrado en la base de datos.";
+                            dbTx.Rollback();
                             return false;
                         }
 
                         decimal totalGeneral = 0m;
                         var detallesTransaccion = new List<DetalleTransaccion>();
 
-                        // 2. Validar existencias y descontar inventario
+                        // 3. Validar cantidades, existencias y descontar inventario
                         foreach (var item in articulosRenta)
                         {
+                            if (item.Cantidad <= 0)
+                            {
+                                mensajeError = $"La cantidad para '{item.Titulo}' debe ser mayor a cero.";
+                                dbTx.Rollback();
+                                return false;
+                            }
+
                             var articuloDb = db.Articulos.Find(item.IdArticulo);
                             if (articuloDb == null || !articuloDb.Activo)
                             {
@@ -165,9 +181,9 @@ namespace BlockBuster.Logica
                             });
                         }
 
-                        // 3. Crear registro de Transaccion
-                        int countTrx = db.Transacciones.Count() + 1;
-                        string folioTrx = $"RNT-{DateTime.Now:yyyyMMdd}-{countTrx:D4}";
+                        // 4. Crear registro de Transaccion con folio único basado en máximo ID
+                        int siguienteIdTrx = (db.Transacciones.Select(t => (int?)t.IdTransaccion).Max() ?? 0) + 1;
+                        string folioTrx = $"RNT-{DateTime.Now:yyyyMMdd}-{siguienteIdTrx:D4}";
 
                         var transaccion = new Transaccion
                         {

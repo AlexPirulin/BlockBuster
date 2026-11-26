@@ -76,14 +76,33 @@ namespace BlockBuster.Interfaz
 
         #region Eventos de Botones Principales
 
+        /// <summary>
+        /// Método auxiliar que valida permisos antes de abrir una ventana MDI Singleton,
+        /// evitando duplicar cuadros de diálogo de acceso denegado.
+        /// </summary>
+        private void AbrirSiTienePermiso(bool autorizado, string nombreModulo, Func<Form> obtenerInstancia)
+        {
+            if (!autorizado)
+            {
+                MessageBox.Show(
+                    $"Su rol actual '{SesionActual.Rol}' no cuenta con permisos para acceder a {nombreModulo}.",
+                    "Acceso Denegado",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            AbrirVentanaMdi(obtenerInstancia());
+        }
+
         private void btnRenta_Click(object sender, EventArgs e)
         {
-            AbrirVentanaMdi(frmRentas.ObtenerInstancia());
+            AbrirSiTienePermiso(PermisosService.PuedeRealizarRentas(), "módulo de rentas", () => frmRentas.ObtenerInstancia());
         }
 
         private void btnVenta_Click(object sender, EventArgs e)
         {
-            AbrirVentanaMdi(frmVentas.ObtenerInstancia());
+            AbrirSiTienePermiso(PermisosService.PuedeRealizarVentas(), "módulo de ventas", () => frmVentas.ObtenerInstancia());
         }
 
         private void btnCompra_Click(object sender, EventArgs e)
@@ -93,17 +112,10 @@ namespace BlockBuster.Interfaz
 
         private void btnComprasPendientes_Click(object sender, EventArgs e)
         {
-            if (!PermisosService.EsAdministrador() && !PermisosService.EsCajero())
-            {
-                MessageBox.Show(
-                    $"Su rol actual '{SesionActual.Rol}' no cuenta con permisos para revisar compras pendientes.",
-                    "Acceso Denegado",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-                return;
-            }
-
-            AbrirVentanaMdi(frmComprasPendientes.ObtenerInstancia());
+            AbrirSiTienePermiso(
+                PermisosService.EsAdministrador() || PermisosService.EsCajero(),
+                "revisar compras pendientes",
+                () => frmComprasPendientes.ObtenerInstancia());
         }
 
         private void btnCatalogo_Click(object sender, EventArgs e)
@@ -113,17 +125,10 @@ namespace BlockBuster.Interfaz
 
         private void btnRentasActivas_Click(object sender, EventArgs e)
         {
-            if (!PermisosService.PuedeRegistrarDevolucion())
-            {
-                MessageBox.Show(
-                    $"Su rol actual '{SesionActual.Rol}' no cuenta con permisos para registrar devoluciones.",
-                    "Acceso Denegado",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-                return;
-            }
-
-            AbrirVentanaMdi(frmRentasActivas.ObtenerInstancia());
+            AbrirSiTienePermiso(
+                PermisosService.PuedeRegistrarDevolucion(),
+                "registrar devoluciones de rentas",
+                () => frmRentasActivas.ObtenerInstancia());
         }
 
         private void btnTickets_Click(object sender, EventArgs e)
@@ -133,93 +138,45 @@ namespace BlockBuster.Interfaz
 
         private void btnReportes_Click(object sender, EventArgs e)
         {
-            if (!PermisosService.PuedeVerReportes())
-            {
-                MessageBox.Show(
-                    $"Su rol actual '{SesionActual.Rol}' no cuenta con permisos para consultar reportes administrativos.",
-                    "Acceso Denegado",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-                return;
-            }
-
-            AbrirVentanaMdi(frmReportes.ObtenerInstancia());
+            AbrirSiTienePermiso(
+                PermisosService.PuedeVerReportes(),
+                "consultar reportes administrativos",
+                () => frmReportes.ObtenerInstancia());
         }
 
         private void btnConfiguracion_Click(object sender, EventArgs e)
         {
-            if (!PermisosService.PuedeConfigurarSistema())
-            {
-                MessageBox.Show(
-                    $"Su rol actual '{SesionActual.Rol}' no cuenta con permisos para modificar la configuración.",
-                    "Acceso Denegado",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-                return;
-            }
-
-            AbrirVentanaMdi(frmConfiguracion.ObtenerInstancia());
+            AbrirSiTienePermiso(
+                PermisosService.PuedeConfigurarSistema(),
+                "modificar la configuración del sistema",
+                () => frmConfiguracion.ObtenerInstancia());
         }
 
         private void btnInventario_Click(object sender, EventArgs e)
         {
-            // Validación de permisos en la capa lógica
-            if (!PermisosService.PuedeEditarInventario())
-            {
-                MessageBox.Show(
-                    $"Su rol actual '{SesionActual.Rol}' no cuenta con permisos para gestionar el inventario.",
-                    "Acceso Denegado",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-                return;
-            }
-
-            AbrirVentanaMdi(frmInventario.ObtenerInstancia());
+            AbrirSiTienePermiso(
+                PermisosService.PuedeEditarInventario(),
+                "gestionar el inventario",
+                () => frmInventario.ObtenerInstancia());
         }
 
         private void btnUsuarios_Click(object sender, EventArgs e)
         {
-            // Validación de permisos en la capa lógica: Solo Admin puede gestionar usuarios
-            if (!PermisosService.PuedeGestionarUsuarios())
-            {
-                MessageBox.Show(
-                    $"Su rol actual '{SesionActual.Rol}' no cuenta con permisos para gestionar usuarios del sistema.",
-                    "Acceso Denegado",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-                return;
-            }
-
-            AbrirVentanaMdi(fmrRegistroUsuario.ObtenerInstancia());
+            AbrirSiTienePermiso(
+                PermisosService.PuedeGestionarUsuarios(),
+                "gestionar usuarios del sistema",
+                () => fmrRegistroUsuario.ObtenerInstancia());
         }
 
         private void btnClientes_Click(object sender, EventArgs e)
         {
-            // Validación de permisos en la capa lógica
-            if (!PermisosService.EsAdministrador() && !PermisosService.EsCajero())
-            {
-                MessageBox.Show(
-                    $"Su rol actual '{SesionActual.Rol}' no cuenta con permisos para gestionar clientes.",
-                    "Acceso Denegado",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-                return;
-            }
-
-            AbrirVentanaMdi(frmRegistroCliente.ObtenerInstancia());
+            AbrirSiTienePermiso(
+                PermisosService.EsAdministrador() || PermisosService.EsCajero(),
+                "gestionar clientes",
+                () => frmRegistroCliente.ObtenerInstancia());
         }
 
         #endregion
-
-        /// <summary>
-        /// Abre la ventana de selección de categoría para la operación seleccionada (Renta, Venta o Compra).
-        /// Todos los roles tienen acceso y se utiliza el patrón Singleton para asegurar que no se abran
-        /// múltiples opciones o instancias a la vez.
-        /// </summary>
-        private void EjecutarOperacion(string operacion)
-        {
-            AbrirVentanaMdi(frmSeleccionCategoria.ObtenerInstancia(operacion));
-        }
 
         /// <summary>
         /// Cierra cualquier otra ventana secundaria para mantener una sola activa a la vez (Singleton)

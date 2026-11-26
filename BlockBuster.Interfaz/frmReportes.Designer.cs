@@ -710,3 +710,4 @@ namespace BlockBuster.Interfaz
         private System.Windows.Forms.DataGridViewTextBoxColumn colTrxEstado;
     }
 }
+

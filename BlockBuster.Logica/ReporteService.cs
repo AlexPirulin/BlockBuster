@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using BlockBuster.Datos;
 using BlockBuster.Datos.Entidades;
 
@@ -71,15 +72,19 @@ namespace BlockBuster.Logica
                     DateTime inicio = fechaInicio.Date;
                     DateTime fin = fechaFin.Date.AddDays(1).AddTicks(-1);
 
-                    // Filtrar transacciones efectivas del periodo
+                    // Filtrar transacciones efectivas del periodo en modo solo lectura (AsNoTracking)
                     var transacciones = db.Transacciones
+                        .AsNoTracking()
                         .Where(t => t.Fecha >= inicio && t.Fecha <= fin &&
                                     (t.Estado == "Completada" || t.Estado == "Aprobada"))
                         .OrderByDescending(t => t.Fecha)
                         .ToList();
 
-                    var clientes = db.Clientes.ToDictionary(c => c.IdCliente);
-                    var usuarios = db.Usuarios.ToDictionary(u => u.IdUsuario);
+                    var idsClientes = transacciones.Select(t => t.IdCliente).Distinct().ToList();
+                    var idsUsuarios = transacciones.Select(t => t.IdUsuario).Distinct().ToList();
+
+                    var clientes = db.Clientes.AsNoTracking().Where(c => idsClientes.Contains(c.IdCliente)).ToDictionary(c => c.IdCliente);
+                    var usuarios = db.Usuarios.AsNoTracking().Where(u => idsUsuarios.Contains(u.IdUsuario)).ToDictionary(u => u.IdUsuario);
                     foreach (var t in transacciones)
                     {
                         if (clientes.TryGetValue(t.IdCliente, out var cli)) t.Cliente = cli;
@@ -92,6 +97,7 @@ namespace BlockBuster.Logica
 
                     // Recargos cobrados en devoluciones durante el periodo
                     decimal totalRecargos = db.Rentas
+                        .AsNoTracking()
                         .Where(r => r.FechaDevolucionReal.HasValue &&
                                     r.FechaDevolucionReal.Value >= inicio &&
                                     r.FechaDevolucionReal.Value <= fin)
@@ -100,6 +106,7 @@ namespace BlockBuster.Logica
 
                     // Artículos con menos existencias (activos)
                     var articulosBajoStock = db.Articulos
+                        .AsNoTracking()
                         .Where(a => a.Activo)
                         .OrderBy(a => a.Stock)
                         .ThenBy(a => a.Titulo)
@@ -111,6 +118,7 @@ namespace BlockBuster.Logica
                     if (articulosBajoStock.Count == 0)
                     {
                         articulosBajoStock = db.Articulos
+                            .AsNoTracking()
                             .Where(a => a.Activo)
                             .OrderBy(a => a.Stock)
                             .ThenBy(a => a.Titulo)
@@ -142,3 +150,4 @@ namespace BlockBuster.Logica
         }
     }
 }
+

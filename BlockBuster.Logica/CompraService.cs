@@ -94,8 +94,8 @@ namespace BlockBuster.Logica
                         string estadoInicial = esStaff ? "Completada" : "Pendiente";
                         quedoPendiente = !esStaff;
 
-                        int countTrx = db.Transacciones.Count() + 1;
-                        string folioTrx = $"CMP-{DateTime.Now:yyyyMMdd}-{countTrx:D4}";
+                        int siguienteIdTrx = (db.Transacciones.Select(t => (int?)t.IdTransaccion).Max() ?? 0) + 1;
+                        string folioTrx = $"CMP-{DateTime.Now:yyyyMMdd}-{siguienteIdTrx:D4}";
 
                         var transaccion = new Transaccion
                         {

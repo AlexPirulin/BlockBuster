@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using BlockBuster.Datos;
 using BlockBuster.Datos.Entidades;
 
@@ -106,17 +107,25 @@ namespace BlockBuster.Logica
                 using (var db = new BlockBusterDbContext())
                 {
                     var rentas = db.Rentas
+                        .AsNoTracking()
                         .Where(r => r.Estado == "Activa" || r.Estado == "Vencida")
                         .OrderBy(r => r.FechaDevolucionPrevista)
                         .ToList();
 
                     var idsTrx = rentas.Select(r => r.IdTransaccion).Distinct().ToList();
                     var transacciones = db.Transacciones
+                        .AsNoTracking()
                         .Where(t => idsTrx.Contains(t.IdTransaccion))
                         .ToDictionary(t => t.IdTransaccion);
 
-                    var clientes = db.Clientes.ToDictionary(c => c.IdCliente);
+                    var idsClientes = transacciones.Values.Select(t => t.IdCliente).Distinct().ToList();
+                    var clientes = db.Clientes
+                        .AsNoTracking()
+                        .Where(c => idsClientes.Contains(c.IdCliente))
+                        .ToDictionary(c => c.IdCliente);
+
                     var detalles = db.DetallesTransacciones
+                        .AsNoTracking()
                         .Where(d => idsTrx.Contains(d.IdTransaccion))
                         .ToList();
 
@@ -264,3 +273,4 @@ namespace BlockBuster.Logica
         }
     }
 }
+

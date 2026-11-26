@@ -374,3 +374,4 @@ namespace BlockBuster.Interfaz
         private System.Windows.Forms.Button btnCerrar;
     }
 }
+

@@ -40,6 +40,13 @@ namespace BlockBuster.Logica
             mensajeError = string.Empty;
             ticketGenerado = null;
 
+            // 1. Validación de permisos en la capa lógica (Admin o Caja)
+            if (SesionActual.EstaAutenticado && !PermisosService.PuedeRealizarVentas())
+            {
+                mensajeError = $"Acceso denegado: el rol '{SesionActual.Rol}' no tiene permisos para registrar ventas.";
+                return false;
+            }
+
             if (idCliente <= 0)
             {
                 mensajeError = "Debe asociar la venta a un cliente registrado.";
@@ -73,6 +80,7 @@ namespace BlockBuster.Logica
                         if (cliente == null || !cliente.Activo)
                         {
                             mensajeError = "El cliente seleccionado no existe o está inactivo.";
+                            dbTx.Rollback();
                             return false;
                         }
 
@@ -80,15 +88,23 @@ namespace BlockBuster.Logica
                         if (usuario == null)
                         {
                             mensajeError = "Usuario de atención no encontrado.";
+                            dbTx.Rollback();
                             return false;
                         }
 
                         decimal totalGeneral = 0m;
                         var detalles = new List<DetalleTransaccion>();
 
-                        // Validar existencias de cada artículo y descontar
+                        // Validar cantidades y existencias de cada artículo antes de descontar
                         foreach (var item in carrito)
                         {
+                            if (item.Cantidad <= 0)
+                            {
+                                mensajeError = $"La cantidad para '{item.Titulo}' debe ser mayor a cero.";
+                                dbTx.Rollback();
+                                return false;
+                            }
+
                             var artDb = db.Articulos.Find(item.IdArticulo);
                             if (artDb == null || !artDb.Activo)
                             {
@@ -120,9 +136,9 @@ namespace BlockBuster.Logica
                             });
                         }
 
-                        // Generar Folio de Venta
-                        int countTrx = db.Transacciones.Count() + 1;
-                        string folioTrx = $"VNT-{DateTime.Now:yyyyMMdd}-{countTrx:D4}";
+                        // Generar Folio de Venta único basado en el último ID registrado
+                        int siguienteIdTrx = (db.Transacciones.Select(t => (int?)t.IdTransaccion).Max() ?? 0) + 1;
+                        string folioTrx = $"VNT-{DateTime.Now:yyyyMMdd}-{siguienteIdTrx:D4}";
 
                         var transaccion = new Transaccion
                         {

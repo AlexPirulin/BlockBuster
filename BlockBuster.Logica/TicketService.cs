@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 using BlockBuster.Datos;
 using BlockBuster.Datos.Entidades;
 
@@ -54,9 +55,8 @@ namespace BlockBuster.Logica
             if (db == null) throw new ArgumentNullException(nameof(db));
             if (transaccion == null) throw new ArgumentNullException(nameof(transaccion));
 
-            // 1. Obtener consecutivo para el folio único
-            int totalTickets = db.Tickets.Count();
-            int consecutivo = totalTickets + 1;
+            // 1. Obtener consecutivo único basado en el máximo IdTicket existente
+            int consecutivo = (db.Tickets.Select(t => (int?)t.IdTicket).Max() ?? 0) + 1;
             string folio = $"TKT-{consecutivo:D5}";
 
             // 2. Construir el texto formateado del ticket
@@ -230,6 +230,37 @@ namespace BlockBuster.Logica
         }
 
         /// <summary>
+        /// Método auxiliar que carga únicamente las transacciones, clientes y usuarios referenciados
+        /// por la lista de tickets dada (evita cargar tablas completas en memoria).
+        /// </summary>
+        private void CargarRelacionesTickets(BlockBusterDbContext db, List<Ticket> tickets)
+        {
+            if (tickets == null || tickets.Count == 0) return;
+
+            var idsTrx = tickets.Select(t => t.IdTransaccion).Distinct().ToList();
+            var transacciones = db.Transacciones
+                .AsNoTracking()
+                .Where(tr => idsTrx.Contains(tr.IdTransaccion))
+                .ToDictionary(tr => tr.IdTransaccion);
+
+            var idsClientes = transacciones.Values.Select(tr => tr.IdCliente).Distinct().ToList();
+            var idsUsuarios = transacciones.Values.Select(tr => tr.IdUsuario).Distinct().ToList();
+
+            var clientes = db.Clientes.AsNoTracking().Where(c => idsClientes.Contains(c.IdCliente)).ToDictionary(c => c.IdCliente);
+            var usuarios = db.Usuarios.AsNoTracking().Where(u => idsUsuarios.Contains(u.IdUsuario)).ToDictionary(u => u.IdUsuario);
+
+            foreach (var t in tickets)
+            {
+                if (transacciones.TryGetValue(t.IdTransaccion, out var trx))
+                {
+                    if (clientes.TryGetValue(trx.IdCliente, out var cli)) trx.Cliente = cli;
+                    if (usuarios.TryGetValue(trx.IdUsuario, out var usr)) trx.Usuario = usr;
+                    t.Transaccion = trx;
+                }
+            }
+        }
+
+        /// <summary>
         /// Busca tickets filtrando por folio, fecha y/o nombre de cliente.
         /// Respeta permisos en la lógica: Admin y Caja ven el historial completo; Cliente solo ve los suyos.
         /// </summary>
@@ -239,32 +270,30 @@ namespace BlockBuster.Logica
             {
                 using (var db = new BlockBusterDbContext())
                 {
-                    var tickets = db.Tickets
-                        .OrderByDescending(t => t.FechaEmision)
-                        .ToList();
-
-                    var transacciones = db.Transacciones.ToDictionary(tr => tr.IdTransaccion);
-                    var clientes = db.Clientes.ToDictionary(c => c.IdCliente);
-                    var usuarios = db.Usuarios.ToDictionary(u => u.IdUsuario);
-
-                    foreach (var t in tickets)
-                    {
-                        if (transacciones.TryGetValue(t.IdTransaccion, out var trx))
-                        {
-                            if (clientes.TryGetValue(trx.IdCliente, out var cli)) trx.Cliente = cli;
-                            if (usuarios.TryGetValue(trx.IdUsuario, out var usr)) trx.Usuario = usr;
-                            t.Transaccion = trx;
-                        }
-                    }
-
-                    IEnumerable<Ticket> consulta = tickets;
+                    IQueryable<Ticket> query = db.Tickets.AsNoTracking();
 
                     // Validación de permisos en la lógica: Cliente solo ve los propios
                     if (SesionActual.EstaAutenticado && !PermisosService.PuedeVerHistorialCompletoTickets())
                     {
                         int idUsr = SesionActual.IdUsuario;
-                        consulta = consulta.Where(t => t.Transaccion != null && t.Transaccion.IdUsuario == idUsr);
+                        var idsTrxUsuario = db.Transacciones
+                            .AsNoTracking()
+                            .Where(tr => tr.IdUsuario == idUsr)
+                            .Select(tr => tr.IdTransaccion);
+                        query = query.Where(t => idsTrxUsuario.Contains(t.IdTransaccion));
                     }
+
+                    if (fecha.HasValue)
+                    {
+                        DateTime inicioDia = fecha.Value.Date;
+                        DateTime finDia = inicioDia.AddDays(1);
+                        query = query.Where(t => t.FechaEmision >= inicioDia && t.FechaEmision < finDia);
+                    }
+
+                    var tickets = query.OrderByDescending(t => t.FechaEmision).ToList();
+                    CargarRelacionesTickets(db, tickets);
+
+                    IEnumerable<Ticket> consulta = tickets;
 
                     if (!string.IsNullOrWhiteSpace(folio))
                     {
@@ -272,12 +301,6 @@ namespace BlockBuster.Logica
                         consulta = consulta.Where(t =>
                             (!string.IsNullOrEmpty(t.Folio) && t.Folio.ToLowerInvariant().Contains(f)) ||
                             (t.Transaccion != null && !string.IsNullOrEmpty(t.Transaccion.Folio) && t.Transaccion.Folio.ToLowerInvariant().Contains(f)));
-                    }
-
-                    if (fecha.HasValue)
-                    {
-                        DateTime dia = fecha.Value.Date;
-                        consulta = consulta.Where(t => t.FechaEmision.Date == dia);
                     }
 
                     if (!string.IsNullOrWhiteSpace(cliente))
@@ -309,29 +332,17 @@ namespace BlockBuster.Logica
                 using (var db = new BlockBusterDbContext())
                 {
                     var idsTrx = db.Transacciones
+                        .AsNoTracking()
                         .Where(tr => tr.IdUsuario == idUsuario)
-                        .Select(tr => tr.IdTransaccion)
-                        .ToList();
+                        .Select(tr => tr.IdTransaccion);
 
                     var tickets = db.Tickets
+                        .AsNoTracking()
                         .Where(t => idsTrx.Contains(t.IdTransaccion))
                         .OrderByDescending(t => t.FechaEmision)
                         .ToList();
 
-                    var transacciones = db.Transacciones.Where(tr => idsTrx.Contains(tr.IdTransaccion)).ToDictionary(tr => tr.IdTransaccion);
-                    var clientes = db.Clientes.ToDictionary(c => c.IdCliente);
-                    var usuarios = db.Usuarios.ToDictionary(u => u.IdUsuario);
-
-                    foreach (var t in tickets)
-                    {
-                        if (transacciones.TryGetValue(t.IdTransaccion, out var trx))
-                        {
-                            if (clientes.TryGetValue(trx.IdCliente, out var cli)) trx.Cliente = cli;
-                            if (usuarios.TryGetValue(trx.IdUsuario, out var usr)) trx.Usuario = usr;
-                            t.Transaccion = trx;
-                        }
-                    }
-
+                    CargarRelacionesTickets(db, tickets);
                     return tickets;
                 }
             }
