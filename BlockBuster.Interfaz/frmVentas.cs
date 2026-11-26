@@ -330,10 +330,12 @@ namespace BlockBuster.Interfaz
                     // Mostrar el ticket oficial
                     frmTicketViewer.MostrarTicketModal(ticket, this);
 
-                    // Limpiar carrito y refrescar artículos
+                    // Limpiar carrito y refrescar artículos en pantalla y vistas abiertas
                     _carrito.Clear();
                     RefrescarGridCarrito();
                     CargarArticulos();
+                    frmCatalogo.RefrescarSiEstaAbierto();
+                    frmInventario.RefrescarSiEstaAbierto();
                 }
                 else
                 {

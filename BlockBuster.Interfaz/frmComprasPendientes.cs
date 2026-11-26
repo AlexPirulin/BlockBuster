@@ -56,6 +56,8 @@ namespace BlockBuster.Interfaz
             }
 
             CargarPendientes();
+            frmCatalogo.RefrescarSiEstaAbierto();
+            frmInventario.RefrescarSiEstaAbierto();
         }
 
         public void CargarPendientes()
@@ -97,6 +99,8 @@ namespace BlockBuster.Interfaz
         private void btnRefrescar_Click(object sender, EventArgs e)
         {
             CargarPendientes();
+            frmCatalogo.RefrescarSiEstaAbierto();
+            frmInventario.RefrescarSiEstaAbierto();
         }
 
         private void btnAprobar_Click(object sender, EventArgs e)
@@ -146,6 +150,8 @@ namespace BlockBuster.Interfaz
                 MessageBoxIcon.Information);
 
             CargarPendientes();
+            frmCatalogo.RefrescarSiEstaAbierto();
+            frmInventario.RefrescarSiEstaAbierto();
 
             if (ticketGenerado != null)
             {
@@ -194,6 +200,8 @@ namespace BlockBuster.Interfaz
                 MessageBoxIcon.Information);
 
             CargarPendientes();
+            frmCatalogo.RefrescarSiEstaAbierto();
+            frmInventario.RefrescarSiEstaAbierto();
         }
 
         private void btnCerrar_Click(object sender, EventArgs e)

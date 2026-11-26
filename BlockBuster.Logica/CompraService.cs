@@ -97,6 +97,9 @@ namespace BlockBuster.Logica
                         int siguienteIdTrx = (db.Transacciones.Select(t => (int?)t.IdTransaccion).Max() ?? 0) + 1;
                         string folioTrx = $"CMP-{DateTime.Now:yyyyMMdd}-{siguienteIdTrx:D4}";
 
+                        string tipoNorm = string.IsNullOrWhiteSpace(tipoArticulo) ? "General" : tipoArticulo.Trim();
+                        string genNorm = string.IsNullOrWhiteSpace(generoPlataforma) ? "Adquirido" : generoPlataforma.Trim();
+
                         var transaccion = new Transaccion
                         {
                             Folio = folioTrx,
@@ -107,7 +110,7 @@ namespace BlockBuster.Logica
                             MetodoPago = "Efectivo",
                             Total = precioValuacionAcordado,
                             Estado = estadoInicial,
-                            Observaciones = $"Compra a cliente. Artículo: '{nombreArticulo.Trim()}', Estado físico: '{estadoFisico}'."
+                            Observaciones = $"Compra a cliente. Artículo: '{nombreArticulo.Trim()}', Estado: '{estadoFisico}'. [Tipo:{tipoNorm}|Genero:{genNorm}]"
                         };
 
                         db.Transacciones.Add(transaccion);
@@ -247,16 +250,19 @@ namespace BlockBuster.Logica
                         transaccion.IdUsuario = idUsuarioAprobador; // Usuario staff que aprueba
                         transaccion.Observaciones += $" [Aprobada por: {usuarioAprobador?.NombreUsuario} en {DateTime.Now:dd/MM/yyyy HH:mm}]";
 
-                        // Sumar al inventario
+                        // Sumar al inventario conservando el Tipo y Género registrados en la propuesta
                         var primerDetalle = transaccion.Detalles.FirstOrDefault();
                         string nombre = primerDetalle?.Descripcion?.Replace("Compra: ", "") ?? "Artículo Adquirido";
                         if (nombre.Contains("(")) nombre = nombre.Substring(0, nombre.IndexOf("(")).Trim();
 
+                        string tipoExtraido = ExtraerEtiqueta(transaccion.Observaciones, "Tipo", "General");
+                        string generoExtraido = ExtraerEtiqueta(transaccion.Observaciones, "Genero", "Usado / Adquirido");
+
                         var articulo = AgregarOIncrementarArticulo(
                             db,
                             nombre,
-                            "General",
-                            "Usado / Adquirido",
+                            tipoExtraido,
+                            generoExtraido,
                             transaccion.Total,
                             transaccion.Total * 1.5m);
 
@@ -373,6 +379,25 @@ namespace BlockBuster.Logica
             db.Articulos.Add(nuevo);
             db.SaveChanges();
             return nuevo;
+        }
+
+        private static string ExtraerEtiqueta(string observaciones, string clave, string valorPorDefecto)
+        {
+            if (string.IsNullOrWhiteSpace(observaciones)) return valorPorDefecto;
+
+            int iniTag = observaciones.IndexOf($"[{clave}:", StringComparison.OrdinalIgnoreCase);
+            if (iniTag < 0)
+            {
+                iniTag = observaciones.IndexOf($"|{clave}:", StringComparison.OrdinalIgnoreCase);
+            }
+            if (iniTag < 0) return valorPorDefecto;
+
+            int inicioValor = iniTag + clave.Length + 2;
+            int finValor = observaciones.IndexOfAny(new[] { '|', ']' }, inicioValor);
+            if (finValor <= inicioValor) return valorPorDefecto;
+
+            string valor = observaciones.Substring(inicioValor, finValor - inicioValor).Trim();
+            return string.IsNullOrWhiteSpace(valor) ? valorPorDefecto : valor;
         }
     }
 }

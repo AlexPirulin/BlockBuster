@@ -280,6 +280,9 @@ namespace BlockBuster.Interfaz
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
 
+                frmCatalogo.RefrescarSiEstaAbierto();
+                frmInventario.RefrescarSiEstaAbierto();
+
                 if (ticketGenerado != null)
                 {
                     frmTicketViewer.MostrarTicketModal(ticketGenerado, this);

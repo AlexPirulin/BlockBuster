@@ -42,6 +42,17 @@ namespace BlockBuster.Interfaz
 
         public static frmCatalogo Instancia => _instancia;
 
+        /// <summary>
+        /// Refresca las tarjetas del catálogo si la ventana se encuentra abierta.
+        /// </summary>
+        public static void RefrescarSiEstaAbierto()
+        {
+            if (_instancia != null && !_instancia.IsDisposed)
+            {
+                _instancia.CargarTarjetas();
+            }
+        }
+
         public frmCatalogo()
         {
             InitializeComponent();

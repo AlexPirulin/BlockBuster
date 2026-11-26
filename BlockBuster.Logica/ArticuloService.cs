@@ -84,20 +84,12 @@ namespace BlockBuster.Logica
                     );
                 }
 
-                // 3. Filtrar por categoría si no es "Todas" ni vacío
+                // 3. Filtrar por categoría si no es "Todas" ni vacío (normalizando acentos y plurales)
                 if (!string.IsNullOrWhiteSpace(categoria) && !categoria.Equals("Todas", StringComparison.OrdinalIgnoreCase))
                 {
-                    string catNormalizada = categoria.Trim().ToLower();
+                    string catNorm = NormalizarTexto(categoria);
 
-                    query = query.Where(a =>
-                        !string.IsNullOrEmpty(a.Tipo) && (
-                            a.Tipo.ToLower().Contains(catNormalizada) ||
-                            (catNormalizada.Contains("película") && a.Tipo.ToLower().Contains("pelicula")) ||
-                            (catNormalizada.Contains("pelicula") && a.Tipo.ToLower().Contains("película")) ||
-                            (catNormalizada.Contains("videojuego") && a.Tipo.ToLower().Contains("videojuego")) ||
-                            (catNormalizada.Contains("consola") && a.Tipo.ToLower().Contains("consola"))
-                        )
-                    );
+                    query = query.Where(a => CoincideCategoria(a.Tipo, catNorm));
                 }
 
                 // 4. Filtrar por disponibilidad (Stock > 0)
@@ -112,6 +104,29 @@ namespace BlockBuster.Logica
             {
                 throw new Exception("Error al buscar artículos: " + ex.Message, ex);
             }
+        }
+
+        private static bool CoincideCategoria(string tipoArticulo, string catNorm)
+        {
+            if (string.IsNullOrEmpty(tipoArticulo)) return false;
+            string tipoNorm = NormalizarTexto(tipoArticulo);
+
+            return tipoNorm.Contains(catNorm) ||
+                   (catNorm.Contains("pelicula") && tipoNorm.Contains("pelicula")) ||
+                   (catNorm.Contains("videojuego") && tipoNorm.Contains("videojuego")) ||
+                   (catNorm.Contains("consola") && tipoNorm.Contains("consola"));
+        }
+
+        private static string NormalizarTexto(string texto)
+        {
+            return (texto ?? string.Empty)
+                .Trim()
+                .ToLowerInvariant()
+                .Replace("á", "a")
+                .Replace("é", "e")
+                .Replace("í", "i")
+                .Replace("ó", "o")
+                .Replace("ú", "u");
         }
 
         /// <summary>

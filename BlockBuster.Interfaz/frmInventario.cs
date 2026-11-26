@@ -32,6 +32,17 @@ namespace BlockBuster.Interfaz
 
         public static frmInventario Instancia => _instancia;
 
+        /// <summary>
+        /// Refresca el inventario si la ventana se encuentra abierta.
+        /// </summary>
+        public static void RefrescarSiEstaAbierto()
+        {
+            if (_instancia != null && !_instancia.IsDisposed)
+            {
+                _instancia.CargarArticulos();
+            }
+        }
+
         public frmInventario()
         {
             InitializeComponent();

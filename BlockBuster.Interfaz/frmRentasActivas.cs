@@ -52,6 +52,8 @@ namespace BlockBuster.Interfaz
             }
 
             CargarRentas();
+            frmCatalogo.RefrescarSiEstaAbierto();
+            frmInventario.RefrescarSiEstaAbierto();
         }
 
         public void CargarRentas()
@@ -110,6 +112,8 @@ namespace BlockBuster.Interfaz
         private void btnRefrescar_Click(object sender, EventArgs e)
         {
             CargarRentas();
+            frmCatalogo.RefrescarSiEstaAbierto();
+            frmInventario.RefrescarSiEstaAbierto();
         }
 
         private void btnRegistrarDevolucion_Click(object sender, EventArgs e)
@@ -173,6 +177,8 @@ namespace BlockBuster.Interfaz
                 MessageBoxIcon.Information);
 
             CargarRentas();
+            frmCatalogo.RefrescarSiEstaAbierto();
+            frmInventario.RefrescarSiEstaAbierto();
         }
 
         private void btnCerrar_Click(object sender, EventArgs e)

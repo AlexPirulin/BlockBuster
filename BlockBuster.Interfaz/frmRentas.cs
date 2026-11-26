@@ -291,9 +291,11 @@ namespace BlockBuster.Interfaz
                     // Mostrar comprobante oficial inmediatamente
                     frmTicketViewer.MostrarTicketModal(ticket, this);
 
-                    // Recargar existencias
+                    // Recargar existencias en pantalla y vistas abiertas
                     CargarArticulos();
                     ActualizarCalculoTotal();
+                    frmCatalogo.RefrescarSiEstaAbierto();
+                    frmInventario.RefrescarSiEstaAbierto();
                 }
                 else
                 {

@@ -111,7 +111,8 @@ namespace BlockBuster.Interfaz
             "Todas",
             "Películas",
             "Videojuegos",
-            "Consolas"});
+            "Consolas",
+            "General"});
             this.cboFiltroCategoria.Location = new System.Drawing.Point(575, 14);
             this.cboFiltroCategoria.Name = "cboFiltroCategoria";
             this.cboFiltroCategoria.Size = new System.Drawing.Size(165, 26);
